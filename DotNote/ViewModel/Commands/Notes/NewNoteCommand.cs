@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNote.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -18,12 +19,18 @@ namespace DotNote.ViewModel.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return true; 
+            var selectedNotebook = parameter as Notebook;
+            if (selectedNotebook == null) return false;
+            return true;
         }
 
         public void Execute(object? parameter)
         {
-            // TODO - implement logic
+            var selectedNotebook = parameter as Notebook;
+
+            if(selectedNotebook == null) return;
+
+            VM.CreateNote(selectedNotebook.Id);
         }
     }
 }

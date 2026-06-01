@@ -23,7 +23,7 @@ namespace DotNote.ViewModel.Commands
 
         public void Execute(object? parameter)
         {
-            // TODO - implement logic
+            VM.CreateNotebook();
         }
     }
 }

@@ -4,15 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DotNote.View"
+        xmlns:vm="clr-namespace:DotNote.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="450">
-    <DockPanel>
+        Title="NotesWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <vm:NotesVM x:Key="NotesVM"/>
+    </Window.Resources>
+    
+    <DockPanel DataContext="{StaticResource NotesVM}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="New Notebook" />
-                <MenuItem Header="New Note" />
+                <MenuItem Header="New Notebook" 
+                          Command="{Binding NewNotebookCommand}" />
+                <MenuItem Header="New Note" 
+                          Command="{Binding NewNoteCommand}"
+                          CommandParameter="{Binding SelectedNotebook}"/> <!-- Pass the selected notebook as a parameter -->
+                
                 <Separator/>
-                <MenuItem Header="Exit"
+                
+                <MenuItem Header="Exit" 
                           Click="Exit_Click"/>
             </MenuItem>
         </Menu>

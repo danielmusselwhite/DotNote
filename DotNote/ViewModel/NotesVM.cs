@@ -1,5 +1,6 @@
 ﻿using DotNote.Model;
 using DotNote.ViewModel.Commands;
+using DotNote.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +32,7 @@ namespace DotNote.ViewModel
         public NewNoteCommand NewNoteCommand { get; set; }
         #endregion
 
+        #region Constructor
         public NotesVM()
         {
             Notebooks = new ObservableCollection<Notebook>();
@@ -38,5 +40,31 @@ namespace DotNote.ViewModel
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
         }
+        #endregion
+
+        #region Methods
+        public void CreateNote(int notebookId)
+        {
+            Note newNote = new Note
+            {
+                NotebookId = notebookId,
+                Title = "New Note",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            DatabaseHelper.Insert(newNote);
+        }
+        public void CreateNotebook()
+        {
+            Notebook newNotebook = new Notebook
+            {
+                Name = "New Notebook",
+                //UserId = userId // todo - implement user management
+            };
+
+            DatabaseHelper.Insert(newNotebook);
+        }
+        #endregion
     }
 }
