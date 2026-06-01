@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DotNote.View"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="NotesWindow" Height="450" Width="450">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New Notebook" />
+                <MenuItem Header="New Note" />
+                <Separator/>
+                <MenuItem Header="Exit"
+                          Click="Exit_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid DockPanel.Dock="Bottom">
+            
+        </Grid>
+    </DockPanel>
 </Window>
