@@ -4,27 +4,35 @@ using DotNote.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text;
 
 namespace DotNote.ViewModel
 {
-    public class NotesVM
+    public class NotesVM : INotifyPropertyChanged
     {
         #region Properties
         public ObservableCollection<Notebook> Notebooks { get; set; }
 
         private Notebook selectedNotebook;
+
         public Notebook SelectedNotebook
         {
             get { return selectedNotebook; }
             set 
             { 
                 selectedNotebook = value;
-                // TODO - implement logic to load notes for selected notebook
+                OnPropertyChanged(nameof(SelectedNotebook));
+
+                GetNotes();
             }
         }
 
         public ObservableCollection<Note> Notes { get; set; }
+        #endregion
+
+        #region Events
+        public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
 
         #region Commands
@@ -35,10 +43,13 @@ namespace DotNote.ViewModel
         #region Constructor
         public NotesVM()
         {
-            Notebooks = new ObservableCollection<Notebook>();
-
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
+
+            Notebooks = new ObservableCollection<Notebook>();
+            Notes = new ObservableCollection<Note>();
+
+            GetNotebooks();
         }
         #endregion
 
@@ -48,12 +59,14 @@ namespace DotNote.ViewModel
             Note newNote = new Note
             {
                 NotebookId = notebookId,
-                Title = "New Note",
+                Title = $"New Note",
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
 
             DatabaseHelper.Insert(newNote);
+
+            GetNotes();
         }
         public void CreateNotebook()
         {
@@ -64,6 +77,40 @@ namespace DotNote.ViewModel
             };
 
             DatabaseHelper.Insert(newNotebook);
+
+            GetNotebooks();
+        }
+
+        private void GetNotebooks()
+        {
+            var notebooks = DatabaseHelper.GetAll<Notebook>();
+
+            Notebooks.Clear();
+            foreach (var notebook in notebooks)
+            {
+                Notebooks.Add(notebook);
+            }
+        }
+
+        private void GetNotes()
+        {
+            if (SelectedNotebook == null || SelectedNotebook.Id == 0) return;
+
+            var notes = DatabaseHelper.GetAll<Note>()
+                .Where(n => n.NotebookId == SelectedNotebook.Id);
+
+            Notes.Clear();
+            foreach (var note in notes)
+            {
+                Notes.Add(note);
+            }
+        }
+        #endregion
+
+        #region Helpers
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }

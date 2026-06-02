@@ -28,7 +28,47 @@
             </MenuItem>
         </Menu>
 
-        <Grid DockPanel.Dock="Bottom">
+        <!-- NoteBooks -->
+        <ListView DockPanel.Dock="Left"
+                  Width="140"
+                  ItemsSource="{Binding Notebooks}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
+                  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Notes -->
+        <ListView DockPanel.Dock="Left"
+                  Width="140"
+                  ItemsSource="{Binding Notes}"
+                  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} for {1}">
+                                <Binding Path="Title"/>
+                                <Binding Path="CreatedAt"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <!-- Toolbar -->
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Speech" Click="SpeechButton_Click"></Button>
+            </ToolBar>
+        </ToolBarTray>
+        
+        <!-- Main Content -->
+        <Grid DockPanel.Dock="Right">
             
         </Grid>
     </DockPanel>

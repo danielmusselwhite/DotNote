@@ -36,7 +36,7 @@ namespace DotNote.ViewModel.Helpers
             return false;
         }
     
-        public static List<T> Read<T>() where T : new()
+        public static List<T> GetAll<T>() where T : new()
         {
             List<T> items = default;
 
