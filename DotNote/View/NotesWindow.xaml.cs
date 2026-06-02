@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -26,12 +27,16 @@ namespace DotNote.View
             InitializeComponent();
         }
 
+        #region Top Menu Handlers
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+        #endregion
 
-        private async Task speechButton_Click(object sender, RoutedEventArgs e)
+        #region Note View Handlers
+        #region Note Toolbar Button Click Handlers
+        private async void speechButton_Click(object sender, RoutedEventArgs e)
         {
             var region = AppSettings.SpeechToText.Region;
             var key = AppSettings.SpeechToText.SubscriptionKey;
@@ -48,6 +53,17 @@ namespace DotNote.View
             }
         }
 
+        private void boldButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            bool isButtonChecked = button?.IsChecked ?? false;
+
+            if(isButtonChecked) rtbContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            else rtbContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+        }
+        #endregion
+
+        #region RichTextBox Event Handlers
         private void rtbContent_TextChanged(object sender, TextChangedEventArgs e)
         {
             string text = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd).Text;
@@ -60,9 +76,12 @@ namespace DotNote.View
             txtStatusMessage.Text = $"Character Count: {charCount}";
         }
 
-        private void boldButton_Click(object sender, RoutedEventArgs e)
+        private void rtbContent_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            rtbContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            var selectedWeight = rtbContent.Selection.GetPropertyValue(Inline.FontWeightProperty);
+            boldButton.IsChecked = selectedWeight != DependencyProperty.UnsetValue && selectedWeight.Equals(FontWeights.Bold); // if entire selection is bold, set button to checked
         }
+        #endregion
+        #endregion
     }
 }

@@ -45,7 +45,7 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 
 * WPF
 * C#
-* .NET
+* .NET 10
 * SQLite
 * Azure Speech Services
 
