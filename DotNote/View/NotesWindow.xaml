@@ -13,6 +13,7 @@
     </Window.Resources>
     
     <DockPanel DataContext="{StaticResource NotesVM}">
+        <!-- Main Menu -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New Notebook" 
@@ -27,6 +28,13 @@
                           Click="Exit_Click"/>
             </MenuItem>
         </Menu>
+
+        <!-- Status Bar -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="txtStatusMessage"/>
+            </StatusBarItem>
+        </StatusBar>
 
         <!-- NoteBooks -->
         <ListView DockPanel.Dock="Left"
@@ -63,13 +71,18 @@
         <!-- Toolbar -->
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech" Click="SpeechButton_Click"></Button>
+                <Button Content="Speech" Click="speechButton_Click"></Button>
+                <Button x:Name="boldButton" Click="boldButton_Click">
+                    <TextBlock Text="B"
+                               FontWeight="Bold"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
         
         <!-- Main Content -->
         <Grid DockPanel.Dock="Right">
-            
+            <RichTextBox x:Name="rtbContent"
+                         TextChanged="rtbContent_TextChanged"/>
         </Grid>
     </DockPanel>
 </Window>
