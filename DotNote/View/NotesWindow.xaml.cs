@@ -25,6 +25,15 @@ namespace DotNote.View
         public NotesWindow()
         {
             InitializeComponent();
+
+            var fontFamilies = Fonts.SystemFontFamilies
+                .OrderBy(f => f.Source);
+
+            // todo - this should be done with data binding and a view model, but for the sake of time I'm doing it in code behind
+            cmbFontFamility.ItemsSource = fontFamilies;
+
+            var fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+            cmbFontSize.ItemsSource = fontSizes;
         }
 
         #region Top Menu Handlers
@@ -35,7 +44,8 @@ namespace DotNote.View
         #endregion
 
         #region Note View Handlers
-        #region Note Toolbar Button Click Handlers
+        // todo - these should be done as commands in the NotesVM, but for the sake of time I'm doing it in code behind
+        #region Note Toolbar Handlers
         private async void speechButton_Click(object sender, RoutedEventArgs e)
         {
             var region = AppSettings.SpeechToText.Region;
@@ -79,6 +89,27 @@ namespace DotNote.View
             if (isButtonChecked) rtbContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
             else rtbContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
         }
+
+        private void cmbFontFamility_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var cmb = sender as ComboBox;
+            var family = cmb?.SelectedItem as FontFamily;
+
+            if (family == null) return;
+
+            rtbContent.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, family);
+        }
+
+        private void cmbFontSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var cmb = sender as ComboBox;
+            if (cmb == null) return;
+
+            if(double.TryParse(cmb.Text,out double fontSize))
+            {
+                rtbContent.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSize);
+            }
+        }
         #endregion
 
         #region RichTextBox Event Handlers
@@ -102,9 +133,17 @@ namespace DotNote.View
             boldButton.IsChecked = selectedWeight != DependencyProperty.UnsetValue && selectedWeight.Equals(FontWeights.Bold); // if entire selection is bold, set button to checked
             underlineButton.IsChecked = rtbContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline; // if entire selection is underlined, set button to checked
             italicButton.IsChecked = rtbContent.Selection.GetPropertyValue(Inline.FontStyleProperty) as FontStyle? == FontStyles.Italic; // if entire selection is italic, set button to checked
+
+            cmbFontFamility.SelectedItem = rtbContent.Selection.GetPropertyValue(Inline.FontFamilyProperty); // set font family combo box to match selection
+            var fontSize = rtbContent.Selection.GetPropertyValue(Inline.FontSizeProperty);
+            cmbFontSize.Text =
+                fontSize == DependencyProperty.UnsetValue
+                    ? ""
+                    : fontSize.ToString(); // set font size combo box to match selection
         }
         #endregion
 
         #endregion
+
     }
 }

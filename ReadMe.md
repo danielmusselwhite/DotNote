@@ -80,4 +80,12 @@ For a locally running desktop application intended for demonstration purposes, t
 
 ## Possible extensions
 
+
+### Must Do
+
+- Add more modern styles
+- Convert everything into full MVVM as it seems View and ViewModle are mixed rn with bindings to buttons etc. instead of going into the viewmodel
+
+### Optional
+
 - Change the Speech to Text to be a toggle button instead of a once off

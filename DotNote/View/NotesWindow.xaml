@@ -84,6 +84,16 @@
                     <TextBlock Text="U"
                                TextDecorations="Underline"/>
                 </ToggleButton>
+
+                <ComboBox x:Name="cmbFontFamility"
+                          Width="100"
+                          SelectionChanged="cmbFontFamility_SelectionChanged" />
+                
+                <ComboBox x:Name="cmbFontSize"
+                          Width="50"
+                          IsEditable="True"
+                          Margin="5,0,0,0"
+                          TextBoxBase.TextChanged="cmbFontSize_TextChanged" />
             </ToolBar>
         </ToolBarTray>
         
