@@ -9,6 +9,7 @@ namespace DotNote
     /// </summary>
     public partial class App : Application
     {
+        public static string UserId { get; set; } = string.Empty;
     }
 
 }

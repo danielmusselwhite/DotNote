@@ -78,8 +78,6 @@ namespace DotNote.ViewModel
             Notes = new ObservableCollection<Note>();
 
             IsNotebookEditVisible = Visibility.Collapsed;
-
-            GetNotebooks();
         }
         #endregion
 
@@ -98,7 +96,7 @@ namespace DotNote.ViewModel
             GetNotebooks();
         }
 
-        private void GetNotebooks()
+        public void GetNotebooks()
         {
             var notebooks = DatabaseHelper.GetAll<Notebook>();
 

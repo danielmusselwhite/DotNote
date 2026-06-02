@@ -42,6 +42,23 @@ namespace DotNote.View
             cmbFontSize.ItemsSource = fontSizes;
         }
 
+        #region LifeCycle Methods
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            if (string.IsNullOrWhiteSpace(App.UserId))
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.ShowDialog();
+
+                VM.GetNotebooks();
+            }
+        }
+
+        #endregion
+
         #region EventHandlers
         private void ViewModel_SelectedNoteChanged(object? sender, EventArgs e)
         {

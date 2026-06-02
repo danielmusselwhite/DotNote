@@ -91,6 +91,8 @@ For a locally running desktop application intended for demonstration purposes, t
 
 - Add rename and delete options into the Note as well as Notebooks (probs just do after Firebase integration)
 
+- Hide passwords
+
 ### Optional
 
 - Change the Speech to Text to be a toggle button instead of a once off
@@ -98,3 +100,7 @@ For a locally running desktop application intended for demonstration purposes, t
 - Maybe add design time data like in the MVVM app (probably requires binding improved which should be done anyway)
 
 - Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
+
+- Login VS Register, how could the toggling of visiblity be done better, maybe a state machine and enums for the state or is that over engineering (same thing for Visibility of the text edits for renaming)?
+
+- Add a edit user option?
