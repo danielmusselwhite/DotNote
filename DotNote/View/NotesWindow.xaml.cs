@@ -61,6 +61,24 @@ namespace DotNote.View
             if(isButtonChecked) rtbContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
             else rtbContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
         }
+
+        private void italicButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            bool isButtonChecked = button?.IsChecked ?? false;
+
+            if (isButtonChecked) rtbContent.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+            else rtbContent.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Normal);
+        }
+
+        private void underlineButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            bool isButtonChecked = button?.IsChecked ?? false;
+
+            if (isButtonChecked) rtbContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+            else rtbContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, null);
+        }
         #endregion
 
         #region RichTextBox Event Handlers
@@ -79,9 +97,14 @@ namespace DotNote.View
         private void rtbContent_SelectionChanged(object sender, RoutedEventArgs e)
         {
             var selectedWeight = rtbContent.Selection.GetPropertyValue(Inline.FontWeightProperty);
+
+
             boldButton.IsChecked = selectedWeight != DependencyProperty.UnsetValue && selectedWeight.Equals(FontWeights.Bold); // if entire selection is bold, set button to checked
+            underlineButton.IsChecked = rtbContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty) == TextDecorations.Underline; // if entire selection is underlined, set button to checked
+            italicButton.IsChecked = rtbContent.Selection.GetPropertyValue(Inline.FontStyleProperty) as FontStyle? == FontStyles.Italic; // if entire selection is italic, set button to checked
         }
         #endregion
+
         #endregion
     }
 }

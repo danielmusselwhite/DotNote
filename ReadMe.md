@@ -20,6 +20,10 @@ A desktop note-taking application inspired by Evernote. Users can create noteboo
 
 ## Architecture
 
+### ERD
+
+`TODO - put a high level ERD here`
+
 ### Data Model
 
 ```text
@@ -73,3 +77,7 @@ For a locally running desktop application intended for demonstration purposes, t
 ```
 
 4. Build and run the application.
+
+## Possible extensions
+
+- Change the Speech to Text to be a toggle button instead of a once off
