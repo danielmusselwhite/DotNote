@@ -1,1 +1,78 @@
 # DotNote
+
+TODO - give this a better summary once completed
+
+A desktop note-taking application inspired by Evernote. Users can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar.
+
+## Features
+
+TODO - add to this as I add more features
+
+* Create and manage notebooks
+* Create, edit, and delete notes
+* Rich text editing and formatting
+* Local data persistence using SQLite
+* Speech-to-text integration using Azure Speech Services
+
+## Screenshots
+
+TODO - add here once app is finished
+
+## Architecture
+
+### Data Model
+
+```text
+User
+ 1
+ └── * Notebooks
+        1
+        └── * Notes
+```
+
+Relationships:
+
+* One User → Many Notebooks
+* One Notebook → Many Notes
+
+### Design Pattern
+
+The application follows the MVVM (Model-View-ViewModel) architectural pattern, providing separation of concerns between the UI, business logic, and data layers.
+
+## Technologies
+
+TODO - update this and its subsections as more technologies are added
+
+* WPF
+* C#
+* .NET
+* SQLite
+* Azure Speech Services
+
+### Azure Speech Configuration
+
+This portfolio project uses a gitignored `appsettings.json` file to store Azure Speech Service configuration values to ensure secrets remain secure.
+
+However, in a production environment, sensitive information such as API keys would typically be managed through environment variables, a secret management service, or a backend API. 
+
+For a locally running desktop application intended for demonstration purposes, those approaches were considered outside the scope of this project.
+
+## Running the Application
+
+1. Clone the repository.
+2. Create an `appsettings.json` file in the project root.
+3. Add your own Azure Speech Service configuration:
+
+```json
+{
+  "SpeechToText": {
+    "SubscriptionKey": "YOUR_KEY_HERE",
+    "Region": "YOUR_REGION_HERE"
+  }
+}
+```
+
+4. Build and run the application.
+
+```
+```

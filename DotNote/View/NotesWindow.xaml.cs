@@ -1,4 +1,5 @@
-﻿using DotNote.ViewModel;
+﻿using DotNote.Configuration;
+using DotNote.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +31,9 @@ namespace DotNote.View
 
         private void speechButton_Click(object sender, RoutedEventArgs e)
         {
-            // todo - placeholder
+            // todo - implement me
+            var region = AppSettings.SpeechToText.Region;
+            var key = AppSettings.SpeechToText.SubscriptionKey;
         }
 
         private void rtbContent_TextChanged(object sender, TextChangedEventArgs e)
