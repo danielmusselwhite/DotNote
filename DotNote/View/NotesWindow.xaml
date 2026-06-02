@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:DotNote.View"
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         xmlns:vm="clr-namespace:DotNote.ViewModel"
@@ -46,7 +47,25 @@
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:DisplayNotebook Notebook="{Binding}"/> <!-- Bind each entire notebook to each item -->
+                    <Grid>
+                        <uc:DisplayNotebook Notebook="{Binding}">
+                            <uc:DisplayNotebook.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename" 
+                                              Command="{Binding Source={StaticResource NotesVM}, Path=EditNotebookCommand}"/>
+                                </ContextMenu>
+                            </uc:DisplayNotebook.ContextMenu>
+                        </uc:DisplayNotebook>
+                        <TextBox Text="{Binding Name, Mode=TwoWay}"
+                            Visibility="{Binding Source={StaticResource NotesVM}, Path=IsNotebookEditVisible}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource NotesVM}, Path=EndEditNotebookCommand}"
+                                                           CommandParameter="{Binding}"/> <!-- CommandParameter set so we know which Notebook we are updating -->
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -1,11 +1,13 @@
 ﻿using DotNote.Model;
 using DotNote.ViewModel.Commands;
+using DotNote.ViewModel.Commands.Notes;
 using DotNote.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows;
 
 namespace DotNote.ViewModel
 {
@@ -29,6 +31,17 @@ namespace DotNote.ViewModel
         }
 
         public ObservableCollection<Note> Notes { get; set; }
+
+        private Visibility isNotebookEditVisible;
+        public Visibility IsNotebookEditVisible
+        {
+            get { return isNotebookEditVisible; }
+            set
+            {
+                isNotebookEditVisible = value;
+                OnPropertyChanged(nameof(IsNotebookEditVisible));
+            }
+        }
         #endregion
 
         #region Events
@@ -38,6 +51,8 @@ namespace DotNote.ViewModel
         #region Commands
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
+        public EditNotebookCommand EditNotebookCommand { get; set; }
+        public EndEditNotebookCommand EndEditNotebookCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -45,29 +60,20 @@ namespace DotNote.ViewModel
         {
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
+            EditNotebookCommand = new EditNotebookCommand(this);
+            EndEditNotebookCommand = new EndEditNotebookCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
+
+            IsNotebookEditVisible = Visibility.Collapsed;
 
             GetNotebooks();
         }
         #endregion
 
         #region Methods
-        public void CreateNote(int notebookId)
-        {
-            Note newNote = new Note
-            {
-                NotebookId = notebookId,
-                Title = $"New Note",
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-
-            DatabaseHelper.Insert(newNote);
-
-            GetNotes();
-        }
+        #region Notebook Methods
         public void CreateNotebook()
         {
             Notebook newNotebook = new Notebook
@@ -92,6 +98,35 @@ namespace DotNote.ViewModel
             }
         }
 
+        public void StartEditingNotebook()
+        {
+            IsNotebookEditVisible = Visibility.Visible;
+        }
+
+        public void StopEditingNotebook(Notebook notebook)
+        {
+            IsNotebookEditVisible = Visibility.Collapsed;
+            DatabaseHelper.Update(notebook);
+            GetNotebooks();
+        }
+        #endregion
+
+        #region Note Methods
+        public void CreateNote(int notebookId)
+        {
+            Note newNote = new Note
+            {
+                NotebookId = notebookId,
+                Title = $"New Note",
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            DatabaseHelper.Insert(newNote);
+
+            GetNotes();
+        }
+
         private void GetNotes()
         {
             if (SelectedNotebook == null || SelectedNotebook.Id == 0) return;
@@ -105,6 +140,7 @@ namespace DotNote.ViewModel
                 Notes.Add(note);
             }
         }
+        #endregion
         #endregion
 
         #region Helpers

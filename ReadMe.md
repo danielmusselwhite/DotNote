@@ -89,6 +89,12 @@ For a locally running desktop application intended for demonstration purposes, t
 
 - Could the DisplayNote and DisplayNotebook be done better, eg have the whole thing bound instead of having to set the context within? Check weather App and see
 
+- Add rename and delete options into the Note as well as Notebooks (probs just do after Firebase integration)
+
 ### Optional
 
 - Change the Speech to Text to be a toggle button instead of a once off
+
+- Maybe add design time data like in the MVVM app (probably requires binding improved which should be done anyway)
+
+- Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
