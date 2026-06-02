@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DotNote.View"
+        xmlns:uc="clr-namespace:DotNote.View.UserControls"
         xmlns:vm="clr-namespace:DotNote.ViewModel"
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800">
@@ -38,13 +39,14 @@
 
         <!-- NoteBooks -->
         <ListView DockPanel.Dock="Left"
+                  Background="SkyBlue"
                   Width="140"
                   ItemsSource="{Binding Notebooks}"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <uc:DisplayNotebook Notebook="{Binding}"/> <!-- Bind each entire notebook to each item -->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -52,18 +54,12 @@
         <!-- Notes -->
         <ListView DockPanel.Dock="Left"
                   Width="140"
+                  Background="AliceBlue"
                   ItemsSource="{Binding Notes}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0} for {1}">
-                                <Binding Path="Title"/>
-                                <Binding Path="CreatedAt"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <uc:DisplayNote Note="{Binding}"/> <!-- Bind each entire note to each item -->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

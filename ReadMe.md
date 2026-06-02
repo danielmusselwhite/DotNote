@@ -83,8 +83,11 @@ For a locally running desktop application intended for demonstration purposes, t
 
 ### Must Do
 
-- Add more modern styles
+- Add more modern styles + central style sheet
+
 - Convert everything into full MVVM as it seems View and ViewModle are mixed rn with bindings to buttons etc. instead of going into the viewmodel
+
+- Could the DisplayNote and DisplayNotebook be done better, eg have the whole thing bound instead of having to set the context within? Check weather App and see
 
 ### Optional
 
