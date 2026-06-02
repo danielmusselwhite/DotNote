@@ -1,12 +1,12 @@
 # DotNote
 
-TODO - give this a better summary once completed
+`TODO - give this a better summary once completed`
 
 A desktop note-taking application inspired by Evernote. Users can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar.
 
 ## Features
 
-TODO - add to this as I add more features
+`TODO - add to this as I add more features`
 
 * Create and manage notebooks
 * Create, edit, and delete notes
@@ -16,7 +16,7 @@ TODO - add to this as I add more features
 
 ## Screenshots
 
-TODO - add here once app is finished
+`TODO - add here once app is finished`
 
 ## Architecture
 
@@ -41,7 +41,7 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 
 ## Technologies
 
-TODO - update this and its subsections as more technologies are added
+`TODO - update this and its subsections as more technologies are added`
 
 * WPF
 * C#
@@ -73,6 +73,3 @@ For a locally running desktop application intended for demonstration purposes, t
 ```
 
 4. Build and run the application.
-
-```
-```

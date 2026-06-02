@@ -1,5 +1,7 @@
 ﻿using DotNote.Configuration;
 using DotNote.ViewModel;
+using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,11 +31,21 @@ namespace DotNote.View
             Application.Current.Shutdown();
         }
 
-        private void speechButton_Click(object sender, RoutedEventArgs e)
+        private async Task speechButton_Click(object sender, RoutedEventArgs e)
         {
-            // todo - implement me
             var region = AppSettings.SpeechToText.Region;
             var key = AppSettings.SpeechToText.SubscriptionKey;
+
+            var speechConfig = SpeechConfig.FromSubscription(key, region);
+
+            using (var audioConfig = AudioConfig.FromDefaultMicrophoneInput())
+            {
+                using (var recognizer = new SpeechRecognizer(speechConfig, audioConfig))
+                {
+                    var result = await recognizer.RecognizeOnceAsync(); // Recognize speech for 15 seconds or until a pause is detected
+                    rtbContent.Document.Blocks.Add(new Paragraph(new Run(result.Text))); // Append recognized text to the RichTextBox
+                }
+            }
         }
 
         private void rtbContent_TextChanged(object sender, TextChangedEventArgs e)
