@@ -1,5 +1,6 @@
 ﻿using DotNote.Configuration;
 using DotNote.ViewModel;
+using DotNote.ViewModel.Helpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using System;
@@ -22,9 +23,14 @@ namespace DotNote.View
     /// </summary>
     public partial class NotesWindow : Window
     {
+        NotesVM VM;
+
         public NotesWindow()
         {
             InitializeComponent();
+
+            VM = Resources["NotesVM"] as NotesVM; // assign to same instance of VM that's in XAML resources
+            VM.SelectedNoteChanged += ViewModel_SelectedNoteChanged;
 
             var fontFamilies = Fonts.SystemFontFamilies
                 .OrderBy(f => f.Source);
@@ -35,6 +41,24 @@ namespace DotNote.View
             var fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
             cmbFontSize.ItemsSource = fontSizes;
         }
+
+        #region EventHandlers
+        private void ViewModel_SelectedNoteChanged(object? sender, EventArgs e)
+        {
+            // Clear previous contents
+            rtbContent.Document.Blocks.Clear();
+
+            // Set the TextRange in the RichTextBox to the content of the selected note's RTF file if it exists
+            if (!string.IsNullOrWhiteSpace(VM?.SelectedNote?.FileLocation) && System.IO.File.Exists(VM.SelectedNote.FileLocation))
+            {
+                using (var fileStream = System.IO.File.OpenRead(VM.SelectedNote.FileLocation))
+                {
+                    var range = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd);
+                    range.Load(fileStream, DataFormats.Rtf);
+                }
+            }
+        }
+        #endregion
 
         #region Top Menu Handlers
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -110,6 +134,21 @@ namespace DotNote.View
                 rtbContent.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSize);
             }
         }
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedNote == null) return;
+
+            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, $"{VM.SelectedNote.Id}.rtf");
+            VM.SelectedNote.FileLocation = rtfFilePath;
+            DatabaseHelper.Update(VM.SelectedNote);
+
+            using (var fileStream = System.IO.File.Create(rtfFilePath))
+            {
+                var range = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd);
+                range.Save(fileStream, DataFormats.Rtf);
+            }
+        }
         #endregion
 
         #region RichTextBox Event Handlers
@@ -144,6 +183,5 @@ namespace DotNote.View
         #endregion
 
         #endregion
-
     }
 }

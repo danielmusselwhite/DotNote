@@ -15,9 +15,7 @@ namespace DotNote.ViewModel
     {
         #region Properties
         public ObservableCollection<Notebook> Notebooks { get; set; }
-
         private Notebook selectedNotebook;
-
         public Notebook SelectedNotebook
         {
             get { return selectedNotebook; }
@@ -31,6 +29,18 @@ namespace DotNote.ViewModel
         }
 
         public ObservableCollection<Note> Notes { get; set; }
+        private Note selectedNote;
+        public Note SelectedNote
+        {
+            get { return selectedNote; }
+            set 
+            { 
+                selectedNote = value;
+                OnPropertyChanged(nameof(SelectedNote));
+                SelectedNoteChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
 
         private Visibility isNotebookEditVisible;
         public Visibility IsNotebookEditVisible
@@ -46,6 +56,7 @@ namespace DotNote.ViewModel
 
         #region Events
         public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler SelectedNoteChanged;
         #endregion
 
         #region Commands

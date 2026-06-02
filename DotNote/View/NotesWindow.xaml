@@ -43,7 +43,7 @@
                   Background="SkyBlue"
                   Width="140"
                   ItemsSource="{Binding Notebooks}"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -56,7 +56,7 @@
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
-                        <TextBox Text="{Binding Name, Mode=TwoWay}"
+                        <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding Source={StaticResource NotesVM}, Path=IsNotebookEditVisible}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
@@ -75,6 +75,7 @@
                   Width="140"
                   Background="AliceBlue"
                   ItemsSource="{Binding Notes}"
+                  SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -103,12 +104,14 @@
                 <ComboBox x:Name="cmbFontFamility"
                           Width="100"
                           SelectionChanged="cmbFontFamility_SelectionChanged" />
-                
+
                 <ComboBox x:Name="cmbFontSize"
                           Width="50"
                           IsEditable="True"
                           Margin="5,0,0,0"
                           TextBoxBase.TextChanged="cmbFontSize_TextChanged" />
+
+                <Button Content="Save" Click="saveButton_Click"></Button>
             </ToolBar>
         </ToolBarTray>
         
