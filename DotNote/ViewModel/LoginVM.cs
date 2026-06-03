@@ -1,5 +1,6 @@
 ﻿using DotNote.Model;
 using DotNote.ViewModel.Commands.Login;
+using DotNote.ViewModel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,10 @@ namespace DotNote.ViewModel
 {
     public class LoginVM : INotifyPropertyChanged
     {
+        public event EventHandler Authenticated;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+
         #region Properties
         private bool isShowingRegister = false;
 
@@ -37,8 +42,6 @@ namespace DotNote.ViewModel
 
         private User user;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public User User
         {
             get { return user; }
@@ -49,15 +52,15 @@ namespace DotNote.ViewModel
             }
         }
 
-        private string username;
-        public string Username
+        private string email;
+        public string Email
         {
-            get { return username; }
+            get { return email; }
             set 
             { 
-                username = value;
+                email = value;
                 UpdateUser();
-                OnPropertyChanged(nameof(Username));
+                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -135,7 +138,7 @@ namespace DotNote.ViewModel
         {
             User = new User
             {
-                Username = this.Username,
+                Email = this.Email,
                 Password = this.Password,
                 FirstName = this.FirstName,
                 LastName = this.LastName,
@@ -163,14 +166,18 @@ namespace DotNote.ViewModel
             }
         }
 
-        public void PerformLogin()
+        public async void PerformLogin()
         {
-            // todo - implement login logic
+            var success = await FirebaseAuthHelper.Login(User);
+
+            if (success) Authenticated?.Invoke(this, EventArgs.Empty);
         }
 
-        public void PerformRegister()
+        public async void PerformRegister()
         {
-            // todo - implement register logic
+            var success = await FirebaseAuthHelper.Register(User);
+
+            if(success) Authenticated?.Invoke(this, EventArgs.Empty);
         }
         #endregion
 

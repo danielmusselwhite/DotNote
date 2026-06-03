@@ -88,7 +88,7 @@ namespace DotNote.ViewModel
             Notebook newNotebook = new Notebook
             {
                 Name = "New Notebook",
-                //UserId = userId // todo - implement user management
+                UserId = App.UserId
             };
 
             DatabaseHelper.Insert(newNotebook);
@@ -98,7 +98,9 @@ namespace DotNote.ViewModel
 
         public void GetNotebooks()
         {
-            var notebooks = DatabaseHelper.GetAll<Notebook>();
+            var notebooks = DatabaseHelper.GetAll<Notebook>()
+                .Where(n => n.UserId == App.UserId)
+                .ToList();
 
             Notebooks.Clear();
             foreach (var notebook in notebooks)

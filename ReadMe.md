@@ -103,6 +103,8 @@ For a locally running desktop application intended for demonstration purposes, t
 
 - Hide passwords
 
+- Store user details (first name, etc.)
+
 ### Optional
 
 - Change the Speech to Text to be a toggle button instead of a once off

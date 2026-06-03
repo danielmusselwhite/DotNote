@@ -22,7 +22,7 @@ namespace DotNote.ViewModel.Commands.Login
             User user = parameter as User;
 
             if (user == null
-                || string.IsNullOrWhiteSpace(user.Username)
+                || string.IsNullOrWhiteSpace(user.Email)
                 || string.IsNullOrWhiteSpace(user.FirstName)
                 || string.IsNullOrWhiteSpace(user.LastName)
                 || string.IsNullOrWhiteSpace(user.Password)

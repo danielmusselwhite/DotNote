@@ -1,0 +1,87 @@
+﻿using DotNote.Configuration;
+using DotNote.Model;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Windows;
+
+namespace DotNote.ViewModel.Helpers
+{
+    public class FirebaseAuthHelper
+    {
+        private static readonly HttpClient client = new HttpClient();
+
+        public static Task<bool> Register(User user)
+        {
+            return Authenticate(
+                user,
+                "accounts:signUp",
+                "Registration Failed");
+        }
+
+        public static Task<bool> Login(User user)
+        {
+            return Authenticate(
+                user,
+                "accounts:signInWithPassword",
+                "Login Failed");
+        }
+
+
+        private static async Task<bool> Authenticate(
+            User user,
+            string endpoint,
+            string errorTitle)
+        {
+            var apiKey = AppSettings.Firebase.ApiKey;
+
+            var body = new
+            {
+                email = user.Email,
+                password = user.Password,
+                returnSecureToken = true
+            };
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var data = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"https://identitytoolkit.googleapis.com/v1/{endpoint}?key={apiKey}", data);
+            string resultJson = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode) // if the response is not successful, return false
+            {
+                var error = JsonConvert.DeserializeObject<FirebaseError>(resultJson);
+                MessageBox.Show($"{error.error.code} Error: {error.error.message}", errorTitle, MessageBoxButton.OK);
+                return false;
+            }
+
+            var result = JsonConvert.DeserializeObject<FirebaseResponse>(resultJson);
+            App.UserId = result.localId; // store the user id for use in the app
+            return true;
+        }
+
+        #region Firebase Response Data Models
+        public class FirebaseResponse
+        {
+            public string kind { get; set; }
+            public string idToken { get; set; }
+            public string email { get; set; }
+            public string refreshToken { get; set; }
+            public string expiresIn { get; set; }
+            public string localId { get; set; }
+        }
+
+        public class FirebaseError
+        {
+            public FirebaseErrorDetails error { get; set; }
+        }
+
+        public class FirebaseErrorDetails
+        {
+            public int code { get; set; }
+            public string message { get; set; }
+        }
+        #endregion
+    }
+}
