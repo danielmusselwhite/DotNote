@@ -8,10 +8,12 @@ A desktop note-taking application inspired by Evernote. Users can create noteboo
 
 `TODO - add to this as I add more features`
 
+* User auth provided through Firebase Authentication
 * Create and manage notebooks
 * Create, edit, and delete notes
 * Rich text editing and formatting
-* Local data persistence using SQLite
+* Remote data persistence using Firebase Realtime Database
+* Remote file persistence using Azure Blob Storage
 * Speech-to-text integration using Azure Speech Services
 
 ## Screenshots
@@ -45,15 +47,15 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 
 ## Technologies
 
-`TODO - update this and its subsections as more technologies are added`
-
 * WPF
 * C#
 * .NET 10
 * SQLite
+* Blend Animations
 * Firebase Auth
 * Firebase Realtime Data Storage
 * Azure Speech Services
+* Azure Blob Storage
 
 ### Azure Speech Configuration
 
