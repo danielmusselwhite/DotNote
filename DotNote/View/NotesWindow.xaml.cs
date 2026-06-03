@@ -1,4 +1,5 @@
-﻿using DotNote.Configuration;
+﻿using Azure.Storage.Blobs;
+using DotNote.Configuration;
 using DotNote.ViewModel;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
@@ -56,6 +57,8 @@ namespace DotNote.View
         {
             // Clear previous contents
             rtbContent.Document.Blocks.Clear();
+
+            // todo - replace this with azure storage
 
             // Set the TextRange in the RichTextBox to the content of the selected note's RTF file if it exists
             if (!string.IsNullOrWhiteSpace(VM?.SelectedNote?.FileLocation) && System.IO.File.Exists(VM.SelectedNote.FileLocation))
@@ -144,38 +147,43 @@ namespace DotNote.View
             }
         }
 
-        private void saveButton_Click(object sender, RoutedEventArgs e)
+        private async void saveButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM.SelectedNote == null) return;
 
-            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, $"{VM.SelectedNote.Id}.rtf");
-            VM.SelectedNote.FileLocation = rtfFilePath;
-            App.DbHelper.Update(VM.SelectedNote); // first update the Notes db record
+            string fileName = $"{VM.SelectedNote.Id}.rtf";
+            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
 
-            // then save the content of the RichTextBox to an RTF file at the location specified in the Note's FileLocation property
-            // todo - replace this with azure storage
+            // first save the RTF locally
             using (var fileStream = System.IO.File.Create(rtfFilePath))
             {
                 var range = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd);
                 range.Save(fileStream, DataFormats.Rtf);
             }
+
+            // then upload the RTF file and get the URL, and save that URL in the Notes db record
+            VM.SelectedNote.FileLocation = await UploadBlob(rtfFilePath, fileName);
+            await App.DbHelper.Update(VM.SelectedNote); // only update the Notes db record after successfully uploading the file, to avoid having a db record that points to a file that doesn't exist if the upload fails
         }
 
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM.SelectedNote == null) return;
 
-            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, $"{VM.SelectedNote.Id}.rtf");
-            VM.SelectedNote.FileLocation = rtfFilePath;
-            App.DbHelper.Delete(VM.SelectedNote); // first delete the Notes db record
+            string fileName = $"{VM.SelectedNote.Id}.rtf";
+            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
 
-            // then delete the RTF file associated with the note
-            // todo - replace this with azure storage
+            // first, delete the RTF file locally
             if (System.IO.File.Exists(rtfFilePath))
             {
                 System.IO.File.Delete(rtfFilePath);
             }
 
+            // then delete the file from Azure Storage, and if that succeeds, delete the Notes db record
+            await DeleteBlob(rtfFilePath, fileName); 
+            await App.DbHelper.Delete(VM.SelectedNote); // only delete the Notes db record if the file deletion was successful, to avoid orphaned files if the db record is deleted but the file isn't
+
+            // refresh the notes list in the UI after deletion
             await VM.GetNotes();
         }
         #endregion
@@ -208,6 +216,37 @@ namespace DotNote.View
                 fontSize == DependencyProperty.UnsetValue
                     ? ""
                     : fontSize.ToString(); // set font size combo box to match selection
+        }
+        #endregion
+
+        #region Helper Methods
+        private async Task<string> UploadBlob(string rtfFilePath, string fileName)
+        {
+            string connectionString = AppSettings.AzureStorage.ConnectionString;
+            string containerName = AppSettings.AzureStorage.ContainerName;
+
+            var containerClient = new BlobContainerClient(connectionString, containerName);
+            containerClient.CreateIfNotExistsAsync(); // ensure container exists
+
+            var blob = containerClient.GetBlobClient(fileName);
+            await blob.UploadAsync(rtfFilePath, overwrite:true);
+            return blob.Uri.ToString();
+        }
+
+        private async Task<string> DeleteBlob(string rtfFilePath, string fileName)
+        {
+            string connectionString = AppSettings.AzureStorage.ConnectionString;
+            string containerName = AppSettings.AzureStorage.ContainerName;
+
+            var containerClient = new BlobContainerClient(connectionString, containerName);
+            containerClient.CreateIfNotExistsAsync(); // ensure container exists
+
+            var blob = containerClient.GetBlobClient(fileName);
+            var success = await blob.DeleteIfExistsAsync();
+
+            if(!success) throw new Exception("Failed to delete blob from Azure Storage");
+
+            return blob.Uri.ToString();
         }
         #endregion
 

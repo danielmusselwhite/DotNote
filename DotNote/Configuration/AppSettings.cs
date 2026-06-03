@@ -9,6 +9,7 @@ namespace DotNote.Configuration
     {
         public static SpeechToTextSettings SpeechToText { get; }
         public static FirebaseSettings Firebase { get; }
+        public static AzureStorageSettings AzureStorage { get; }
 
         static AppSettings()
         {
@@ -26,6 +27,11 @@ namespace DotNote.Configuration
                 .GetSection("Firebase")
                 .Get<FirebaseSettings>()
                 ?? new FirebaseSettings();
+
+            AzureStorage = configuration
+                .GetSection("AzureStorage")
+                .Get<AzureStorageSettings>()
+                ?? new AzureStorageSettings();
         }
     }
 }
