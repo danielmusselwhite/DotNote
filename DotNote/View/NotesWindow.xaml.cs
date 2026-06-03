@@ -53,17 +53,20 @@ namespace DotNote.View
         #endregion
 
         #region EventHandlers
-        private void ViewModel_SelectedNoteChanged(object? sender, EventArgs e)
+        private async void ViewModel_SelectedNoteChanged(object? sender, EventArgs e)
         {
             // Clear previous contents
             rtbContent.Document.Blocks.Clear();
 
-            // todo - replace this with azure storage
-
             // Set the TextRange in the RichTextBox to the content of the selected note's RTF file if it exists
-            if (!string.IsNullOrWhiteSpace(VM?.SelectedNote?.FileLocation) && System.IO.File.Exists(VM.SelectedNote.FileLocation))
+            if (!string.IsNullOrWhiteSpace(VM?.SelectedNote?.FileLocation))
             {
-                using (var fileStream = System.IO.File.OpenRead(VM.SelectedNote.FileLocation))
+                // first download the file from azure storage, and save it locally
+                string downloadPath = $"{VM.SelectedNote.Id}.rtf";
+                await new BlobClient(new Uri(VM.SelectedNote.FileLocation)).DownloadToAsync(downloadPath);
+
+                // then load that files contents into the Rich Text Box
+                using (var fileStream = System.IO.File.OpenRead(downloadPath))
                 {
                     var range = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd);
                     range.Load(fileStream, DataFormats.Rtf);
