@@ -51,6 +51,8 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 * C#
 * .NET 10
 * SQLite
+* Firebase Auth
+* Firebase Realtime Data Storage
 * Azure Speech Services
 
 ### Azure Speech Configuration
@@ -80,7 +82,8 @@ For a locally running desktop application intended for demonstration purposes, t
     "StorageBucket": "NOT_NEEDED",
     "MessagingSenderId": "NOT_NEEDED",
     "AppId": "NOT_NEEDED",
-    "MeasurementId": "NOT_NEEDED"
+    "MeasurementId": "NOT_NEEDED",
+    "DatabaseURL": "YOUR_DB_URL_HERE"
   }
 }
 
