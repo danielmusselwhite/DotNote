@@ -65,15 +65,25 @@ For a locally running desktop application intended for demonstration purposes, t
 
 1. Clone the repository.
 2. Create an `appsettings.json` file in the project root.
-3. Add your own Azure Speech Service configuration:
+3. Add your own Azure Speech Service configuration and Firebase WebApp configuration:
 
 ```json
 {
   "SpeechToText": {
     "SubscriptionKey": "YOUR_KEY_HERE",
     "Region": "YOUR_REGION_HERE"
+  },
+  "Firebase": {
+    "ApiKey": "YOUR_KEY_HERE",
+    "AuthDomain": "NOT_NEEDED",
+    "ProjectId": "NOT_NEEDED",
+    "StorageBucket": "NOT_NEEDED",
+    "MessagingSenderId": "NOT_NEEDED",
+    "AppId": "NOT_NEEDED",
+    "MeasurementId": "NOT_NEEDED"
   }
 }
+
 ```
 
 4. Build and run the application.
@@ -104,3 +114,5 @@ For a locally running desktop application intended for demonstration purposes, t
 - Login VS Register, how could the toggling of visiblity be done better, maybe a state machine and enums for the state or is that over engineering (same thing for Visibility of the text edits for renaming)?
 
 - Add a edit user option?
+
+- Probably add at least some unit tests

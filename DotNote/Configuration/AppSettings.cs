@@ -8,6 +8,7 @@ namespace DotNote.Configuration
     public static class AppSettings
     {
         public static SpeechToTextSettings SpeechToText { get; }
+        public static FirebaseSettings Firebase { get; }
 
         static AppSettings()
         {
@@ -20,6 +21,11 @@ namespace DotNote.Configuration
                 .GetSection("SpeechToText")
                 .Get<SpeechToTextSettings>()
                 ?? new SpeechToTextSettings();
+
+            Firebase = configuration
+                .GetSection("Firebase")
+                .Get<FirebaseSettings>()
+                ?? new FirebaseSettings();
         }
     }
 }
