@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using DotNote.ViewModel.Helpers.DatabaseHelpers;
 using System.Windows;
 
 namespace DotNote
@@ -10,6 +9,7 @@ namespace DotNote
     public partial class App : Application
     {
         public static string UserId { get; set; } = string.Empty;
+        public static IDatabaseHelper DbHelper { get; private set; } = new FirebaseDbHelper();
     }
 
 }

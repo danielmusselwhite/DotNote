@@ -118,3 +118,9 @@ For a locally running desktop application intended for demonstration purposes, t
 - Add a edit user option?
 
 - Probably add at least some unit tests
+
+- Add an option to use offline vs online mode, where offline mode (after logging in) users the local sqlite db instead
+
+- then have any actions which are done in offline mode (eg all the gets) also update the local sqlite db
+
+- add a colour picker for the font colour?

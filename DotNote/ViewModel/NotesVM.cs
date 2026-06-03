@@ -1,12 +1,8 @@
 ﻿using DotNote.Model;
 using DotNote.ViewModel.Commands;
 using DotNote.ViewModel.Commands.Notes;
-using DotNote.ViewModel.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
 
 namespace DotNote.ViewModel
@@ -24,7 +20,7 @@ namespace DotNote.ViewModel
                 selectedNotebook = value;
                 OnPropertyChanged(nameof(SelectedNotebook));
 
-                GetNotes();
+                _ = GetNotes(); // is this okay as it is async?
             }
         }
 
@@ -62,6 +58,7 @@ namespace DotNote.ViewModel
         #region Commands
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
+        public DeleteNotebookCommand DeleteNotebookCommand { get; set; }
         public EditNotebookCommand EditNotebookCommand { get; set; }
         public EndEditNotebookCommand EndEditNotebookCommand { get; set; }
         #endregion
@@ -71,6 +68,7 @@ namespace DotNote.ViewModel
         {
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
+            DeleteNotebookCommand = new DeleteNotebookCommand(this);
             EditNotebookCommand = new EditNotebookCommand(this);
             EndEditNotebookCommand = new EndEditNotebookCommand(this);
 
@@ -83,7 +81,7 @@ namespace DotNote.ViewModel
 
         #region Methods
         #region Notebook Methods
-        public void CreateNotebook()
+        public async void CreateNotebook()
         {
             Notebook newNotebook = new Notebook
             {
@@ -91,14 +89,14 @@ namespace DotNote.ViewModel
                 UserId = App.UserId
             };
 
-            DatabaseHelper.Insert(newNotebook);
+            await App.DbHelper.Insert(newNotebook);
 
             GetNotebooks();
         }
 
-        public void GetNotebooks()
+        public async void GetNotebooks()
         {
-            var notebooks = DatabaseHelper.GetAll<Notebook>()
+            var notebooks = (await App.DbHelper.GetAll<Notebook>())
                 .Where(n => n.UserId == App.UserId)
                 .ToList();
 
@@ -114,16 +112,23 @@ namespace DotNote.ViewModel
             IsNotebookEditVisible = Visibility.Visible;
         }
 
-        public void StopEditingNotebook(Notebook notebook)
+        public async void StopEditingNotebook(Notebook notebook)
         {
             IsNotebookEditVisible = Visibility.Collapsed;
-            DatabaseHelper.Update(notebook);
+            await App.DbHelper.Update(notebook);
+            GetNotebooks();
+        }
+
+        public async void DeleteNotebook(Notebook notebook)
+        {
+            if (notebook == null) return;
+            await App.DbHelper.Delete(notebook);
             GetNotebooks();
         }
         #endregion
 
         #region Note Methods
-        public void CreateNote(int notebookId)
+        public async void CreateNote(string notebookId)
         {
             Note newNote = new Note
             {
@@ -133,16 +138,16 @@ namespace DotNote.ViewModel
                 UpdatedAt = DateTime.Now
             };
 
-            DatabaseHelper.Insert(newNote);
+            await App.DbHelper.Insert(newNote);
 
-            GetNotes();
+            await GetNotes();
         }
 
-        private void GetNotes()
+        public async Task GetNotes()
         {
-            if (SelectedNotebook == null || SelectedNotebook.Id == 0) return;
+            if (SelectedNotebook == null || string.IsNullOrWhiteSpace(SelectedNotebook.Id)) return;
 
-            var notes = DatabaseHelper.GetAll<Note>()
+            var notes = (await App.DbHelper.GetAll<Note>())
                 .Where(n => n.NotebookId == SelectedNotebook.Id);
 
             Notes.Clear();

@@ -52,7 +52,11 @@
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename" 
-                                              Command="{Binding Source={StaticResource NotesVM}, Path=EditNotebookCommand}"/>
+                                            Command="{Binding Source={StaticResource NotesVM}, Path=EditNotebookCommand}"/>
+                                <MenuItem Header="Delete" 
+                                            Command="{Binding Source={StaticResource NotesVM}, Path=DeleteNotebookCommand}"
+                                            CommandParameter="{Binding}"/>
+                                    <!-- CommandParameter set so we know which Notebook we are updating -->
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
@@ -112,6 +116,7 @@
                           TextBoxBase.TextChanged="cmbFontSize_TextChanged" />
 
                 <Button Content="Save" Click="saveButton_Click"></Button>
+                <Button Content="Delete" Click="deleteButton_Click"></Button>
             </ToolBar>
         </ToolBarTray>
         

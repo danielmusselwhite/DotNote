@@ -1,20 +1,12 @@
 ﻿using DotNote.Configuration;
 using DotNote.ViewModel;
-using DotNote.ViewModel.Helpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DotNote.View
 {
@@ -158,13 +150,33 @@ namespace DotNote.View
 
             string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, $"{VM.SelectedNote.Id}.rtf");
             VM.SelectedNote.FileLocation = rtfFilePath;
-            DatabaseHelper.Update(VM.SelectedNote);
+            App.DbHelper.Update(VM.SelectedNote); // first update the Notes db record
 
+            // then save the content of the RichTextBox to an RTF file at the location specified in the Note's FileLocation property
+            // todo - replace this with azure storage
             using (var fileStream = System.IO.File.Create(rtfFilePath))
             {
                 var range = new TextRange(rtbContent.Document.ContentStart, rtbContent.Document.ContentEnd);
                 range.Save(fileStream, DataFormats.Rtf);
             }
+        }
+
+        private async void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedNote == null) return;
+
+            string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, $"{VM.SelectedNote.Id}.rtf");
+            VM.SelectedNote.FileLocation = rtfFilePath;
+            App.DbHelper.Delete(VM.SelectedNote); // first delete the Notes db record
+
+            // then delete the RTF file associated with the note
+            // todo - replace this with azure storage
+            if (System.IO.File.Exists(rtfFilePath))
+            {
+                System.IO.File.Delete(rtfFilePath);
+            }
+
+            await VM.GetNotes();
         }
         #endregion
 

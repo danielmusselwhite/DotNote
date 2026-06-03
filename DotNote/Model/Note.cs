@@ -1,16 +1,9 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DotNote.Model
+﻿namespace DotNote.Model
 {
-    public class Note
+    public class Note : IHasId
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        [Indexed]
-        public int NotebookId { get; set; }
+        public string Id { get; set; }
+        public string NotebookId { get; set; }
         public string Title { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

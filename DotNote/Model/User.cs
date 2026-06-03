@@ -1,9 +1,4 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DotNote.Model
+﻿namespace DotNote.Model
 {
     public class User
     {

@@ -1,16 +1,14 @@
-﻿using SQLite;
-using System;
-using System.Collections.Generic;
+﻿using DotNote.Model;
+using SQLite;
 using System.IO;
-using System.Text;
 
-namespace DotNote.ViewModel.Helpers
+namespace DotNote.ViewModel.Helpers.DatabaseHelpers
 {
-    public class DatabaseHelper
+    public class SQLiteDbHelper : IDatabaseHelper
     {
         private static string dbFile = Path.Combine(Environment.CurrentDirectory, "dbNotes.db3");
     
-        public static bool Insert<T>(T item)
+        public async Task<bool> Insert<T>(T item)
         {
             using (SQLiteConnection conn = new SQLiteConnection(dbFile))
             {
@@ -23,7 +21,7 @@ namespace DotNote.ViewModel.Helpers
             return false;
         }
     
-        public static bool Update<T>(T item)
+        public async Task<bool> Update<T>(T item) where T : IHasId, new()
         {
             using (SQLiteConnection conn = new SQLiteConnection(dbFile))
             {
@@ -35,8 +33,19 @@ namespace DotNote.ViewModel.Helpers
 
             return false;
         }
-    
-        public static List<T> GetAll<T>() where T : new()
+
+        public async Task<bool> Delete<T>(T item) where T : IHasId, new()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>(); // ensure table exists
+                int rows = conn.Delete(item);
+                if (rows > 0) return true;
+            }
+            return false;
+        }
+
+        public async Task<List<T>> GetAll<T>() where T : IHasId, new()
         {
             List<T> items = default;
 

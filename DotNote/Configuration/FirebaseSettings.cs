@@ -13,5 +13,6 @@ namespace DotNote.Configuration
         public string MessagingSenderId { get; set; } = string.Empty;
         public string AppId { get; set; } = string.Empty;
         public string MeasurementId { get; set; } = string.Empty;
+        public string DatabaseURL { get; set; } = string.Empty;
     }
 }
