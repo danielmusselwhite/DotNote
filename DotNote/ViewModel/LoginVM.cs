@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace DotNote.ViewModel
 {
@@ -16,29 +17,7 @@ namespace DotNote.ViewModel
 
 
         #region Properties
-        private bool isShowingRegister = false;
-
-        private Visibility loginVis;
-        public Visibility LoginVis
-        {
-            get { return loginVis; }
-            set 
-            { 
-                loginVis = value;
-                OnPropertyChanged(nameof(LoginVis));
-            }
-        }
-
-        private Visibility registerVis;
-        public Visibility RegisterVis
-        {
-            get { return registerVis; }
-            set 
-            { 
-                registerVis = value;
-                OnPropertyChanged(nameof(RegisterVis));
-            }
-        }
+        public bool IsShowingRegister { get; set; }
 
         private User user;
 
@@ -116,7 +95,6 @@ namespace DotNote.ViewModel
         #region Commands
         public RegisterCommand RegisterCommand { get; set; }
         public LoginCommand LoginCommand { get; set; }
-        
         public SwitchShownLoginViewCommand SwitchShownLoginViewCommand { get; set; }
         #endregion
 
@@ -126,9 +104,6 @@ namespace DotNote.ViewModel
             
             RegisterCommand = new RegisterCommand(this);
             LoginCommand = new LoginCommand(this);
-
-            LoginVis = Visibility.Visible;
-            RegisterVis = Visibility.Collapsed;
 
             SwitchShownLoginViewCommand = new SwitchShownLoginViewCommand(this);
         }
@@ -150,20 +125,11 @@ namespace DotNote.ViewModel
         #region Command Handlers
         public void SwitchViews()
         {
-            User = new User(); // clear the user details
+            User = new User();
 
-            isShowingRegister = !isShowingRegister;
+            IsShowingRegister = !IsShowingRegister;
 
-            if (isShowingRegister)
-            {
-                RegisterVis = Visibility.Visible;
-                LoginVis = Visibility.Collapsed;
-            }
-            else
-            {
-                RegisterVis = Visibility.Collapsed;
-                LoginVis = Visibility.Visible;
-            }
+            OnPropertyChanged(nameof(IsShowingRegister));
         }
 
         public async void PerformLogin()
