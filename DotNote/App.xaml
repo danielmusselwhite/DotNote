@@ -5,13 +5,84 @@
              StartupUri="View/NotesWindow.xaml">
     <Application.Resources>
 
-        <!-- Implicit style so all buttons slightly shrink on hover -->
+        <!-- Button colors -->
+        <Color x:Key="ButtonBaseColor">#5B9CFF</Color>
+        <Color x:Key="ButtonHoverColor">#6FAEFF</Color>
+        <Color x:Key="ButtonPressedColor">#3F7FE0</Color>
+        <Color x:Key="ButtonDisabledColor">#B8C7E6</Color>
+
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="ButtonBaseBrush"
+                         Color="{StaticResource ButtonBaseColor}"/>
+        <SolidColorBrush x:Key="ButtonHoverBrush"
+                         Color="{StaticResource ButtonHoverColor}"/>
+        <SolidColorBrush x:Key="ButtonPressedBrush"
+                         Color="{StaticResource ButtonPressedColor}"/>
+        <SolidColorBrush x:Key="ButtonDisabledBrush"
+                         Color="{StaticResource ButtonDisabledColor}"/>
+
         <Style TargetType="Button">
+            <Setter Property="Background"
+                    Value="{StaticResource ButtonBaseBrush}"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="Padding"
+                    Value="10,6"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
 
             <Setter Property="RenderTransform">
                 <Setter.Value>
                     <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="Root"
+                                        Property="Background"
+                                        Value="{StaticResource ButtonHoverBrush}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+                                <Setter TargetName="Root"
+                                        Property="Background"
+                                        Value="{StaticResource ButtonPressedBrush}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter TargetName="Root"
+                                        Property="Background"
+                                        Value="{StaticResource ButtonDisabledBrush}"/>
+                                <Setter Property="Foreground"
+                                        Value="#EEEEEE"/>
+                                <Setter Property="Opacity"
+                                        Value="0.6"/>
+                                <Setter Property="Cursor"
+                                        Value="Arrow"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
 
@@ -22,14 +93,13 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation
-                                Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                To="0.95"
-                                Duration="0:0:0.12"/>
-
+                                    Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                    To="0.95"
+                                    Duration="0:0:0.12"/>
                                 <DoubleAnimation
-                                Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                To="0.95"
-                                Duration="0:0:0.12"/>
+                                    Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                    To="0.95"
+                                    Duration="0:0:0.12"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -38,18 +108,16 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation
-                                Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                To="1"
-                                Duration="0:0:0.12"/>
-
+                                    Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                    To="1"
+                                    Duration="0:0:0.12"/>
                                 <DoubleAnimation
-                                Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                To="1"
-                                Duration="0:0:0.12"/>
+                                    Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                    To="1"
+                                    Duration="0:0:0.12"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
-
                 </Trigger>
 
             </Style.Triggers>
