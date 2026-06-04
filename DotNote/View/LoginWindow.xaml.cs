@@ -134,8 +134,6 @@ namespace DotNote.View
             if (e.PropertyName != nameof(LoginVM.IsShowingRegister))
                 return;
 
-            VM.User = new Model.User(); // reset user
-
             if (VM.IsShowingRegister)
             {
                 ShowRegister();

@@ -23,15 +23,7 @@
                     Margin="0,5"
                     Content="Login" />
 
-        <TextBlock Text="Register"
-                       Foreground="DodgerBlue"
-                       TextDecorations="Underline">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonDown">
-                        <i:InvokeCommandAction Command="{Binding SwitchShownLoginViewCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-        </TextBlock>
+        <Button Content="Register" Command="{Binding SwitchShownLoginViewCommand}" />
 
     </StackPanel>
 </UserControl>

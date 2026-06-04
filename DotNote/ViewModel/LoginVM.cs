@@ -125,8 +125,6 @@ namespace DotNote.ViewModel
         #region Command Handlers
         public void SwitchViews()
         {
-            User = new User();
-
             IsShowingRegister = !IsShowingRegister;
 
             OnPropertyChanged(nameof(IsShowingRegister));
