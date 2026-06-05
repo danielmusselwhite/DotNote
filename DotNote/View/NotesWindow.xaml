@@ -92,7 +92,11 @@
         <!-- Toolbar -->
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech" Click="speechButton_Click"></Button>
+                <Button Click="speechButton_Click"
+                    FontFamily="Segoe Fluent Icons"
+                    Content="&#xE720;"
+                    ToolTip="Speech to Text" />
+                
                 <ToggleButton x:Name="boldButton" Click="boldButton_Click">
                     <TextBlock Text="B"
                                FontWeight="Bold"/>
@@ -115,9 +119,17 @@
                           IsEditable="True"
                           Margin="5,0,0,0"
                           TextBoxBase.TextChanged="cmbFontSize_TextChanged" />
+                
+                <Button Click="saveButton_Click"
+                    FontFamily="Segoe Fluent Icons"
+                    Content="&#xE74E;"
+                    ToolTip="Save" />
 
-                <Button Content="Save" Click="saveButton_Click"></Button>
-                <Button Content="Delete" Click="deleteButton_Click"></Button>
+                
+                <Button Click="deleteButton_Click"
+                    FontFamily="Segoe Fluent Icons"
+                    Content="&#xE74D;"
+                    ToolTip="Delete" />
             </ToolBar>
         </ToolBarTray>
         
@@ -126,8 +138,7 @@
             Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             FontSize="16"
             FontWeight="Bold"
-            LostFocus="TitleEdit_LostFocus"
-            Margin="5"/>
+            LostFocus="TitleEdit_LostFocus"/>
 
         <!-- Main Content -->
         <Grid DockPanel.Dock="Right">

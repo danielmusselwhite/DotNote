@@ -98,34 +98,20 @@ For a locally running desktop application intended for demonstration purposes, t
 
 ### Must Do
 
-- Add more modern styles + central style sheet
-
-- Convert everything into full MVVM as it seems View and ViewModle are mixed rn with bindings to buttons etc. instead of going into the viewmodel
-
-- Could the DisplayNote and DisplayNotebook be done better, eg have the whole thing bound instead of having to set the context within? Check weather App and see
+- Add more modern implicit styles and/or a style resource
 
 - Hide passwords
 
-- Store user details (first name, etc.)
+- Store and retrieve user details (first name, surname, etc.)
 
-- If no note selected, hide the notes tab
+- If no note selected, disable the notes tab
 
 ### Optional
 
-- Change the Speech to Text to be a toggle button instead of a once off
-
-- Maybe add design time data like in the MVVM app (probably requires binding improved which should be done anyway)
-
 - Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
-
-- Login VS Register, how could the toggling of visiblity be done better, maybe a state machine and enums for the state or is that over engineering (same thing for Visibility of the text edits for renaming)?
 
 - Add a edit user option?
 
 - Probably add at least some unit tests
-
-- Add an option to use offline vs online mode, where offline mode (after logging in) users the local sqlite db instead
-
-- then have any actions which are done in offline mode (eg all the gets) also update the local sqlite db
 
 - add a colour picker for the font colour?

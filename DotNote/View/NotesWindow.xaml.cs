@@ -182,15 +182,23 @@ namespace DotNote.View
             string fileName = $"{VM.SelectedNote.Id}.rtf";
             string rtfFilePath = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
 
-            // first, delete the RTF file locally
+            // check if file exists locally, as if it doesn't then it also doesn't exist remotely; so no files to delete
             if (System.IO.File.Exists(rtfFilePath))
             {
+                // first, delete the RTF file locally
                 System.IO.File.Delete(rtfFilePath);
+                
+                // then delete the file from Azure Storage, and if that succeeds, delete the Notes db record
+                var success = await DeleteBlob(rtfFilePath, fileName);
+
+                if(!success)
+                {
+                    MessageBox.Show("Failed to delete the note's file from Azure Storage. The note will not be deleted to avoid orphaned files. Please try again.", "Error Deleting Note", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
             }
 
-            // then delete the file from Azure Storage, and if that succeeds, delete the Notes db record
-            await DeleteBlob(rtfFilePath, fileName); 
-            await App.DbHelper.Delete(VM.SelectedNote); // only delete the Notes db record if the file deletion was successful, to avoid orphaned files if the db record is deleted but the file isn't
+            await App.DbHelper.Delete(VM.SelectedNote); // only delete the Notes db record after the file deletion was successful, to avoid orphaned files if the db record is deleted but the file isn't
 
             // refresh the notes list in the UI after deletion
             await VM.GetNotes();
@@ -242,7 +250,7 @@ namespace DotNote.View
             return blob.Uri.ToString();
         }
 
-        private async Task<string> DeleteBlob(string rtfFilePath, string fileName)
+        private async Task<bool> DeleteBlob(string rtfFilePath, string fileName)
         {
             string connectionString = AppSettings.AzureStorage.ConnectionString;
             string containerName = AppSettings.AzureStorage.ContainerName;
@@ -251,11 +259,7 @@ namespace DotNote.View
             containerClient.CreateIfNotExistsAsync(); // ensure container exists
 
             var blob = containerClient.GetBlobClient(fileName);
-            var success = await blob.DeleteIfExistsAsync();
-
-            if(!success) throw new Exception("Failed to delete blob from Azure Storage");
-
-            return blob.Uri.ToString();
+            return await blob.DeleteIfExistsAsync();
         }
         #endregion
 
