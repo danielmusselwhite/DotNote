@@ -110,6 +110,8 @@ For a locally running desktop application intended for demonstration purposes, t
 
 - Store user details (first name, etc.)
 
+- If no note selected, hide the notes tab
+
 ### Optional
 
 - Change the Speech to Text to be a toggle button instead of a once off

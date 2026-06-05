@@ -8,7 +8,8 @@
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         xmlns:vm="clr-namespace:DotNote.ViewModel"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
+        Icon="/favicon.ico"
+        Title="Notes" Height="450" Width="800">
 
     <Window.Resources>
         <vm:NotesVM x:Key="NotesVM"/>

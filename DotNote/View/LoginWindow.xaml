@@ -8,7 +8,8 @@
         xmlns:local="clr-namespace:DotNote.View"
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="300" Width="440">
+        Icon="/favicon.ico"
+        Title="Notes" Height="300" Width="440">
 
     <Window.Resources>
         <ResourceDictionary>
