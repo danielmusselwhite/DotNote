@@ -169,6 +169,12 @@ namespace DotNote.View
             await App.DbHelper.Update(VM.SelectedNote); // only update the Notes db record after successfully uploading the file, to avoid having a db record that points to a file that doesn't exist if the upload fails
         }
 
+        private async void TitleEdit_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedNote == null) return;
+            await App.DbHelper.Update(VM.SelectedNote); // update the title
+        }
+
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (VM.SelectedNote == null) return;

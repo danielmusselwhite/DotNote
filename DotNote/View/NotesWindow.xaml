@@ -121,6 +121,14 @@
             </ToolBar>
         </ToolBarTray>
         
+        <!-- Title Edit Box -->
+        <TextBox DockPanel.Dock="Top"
+            Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            FontSize="16"
+            FontWeight="Bold"
+            LostFocus="TitleEdit_LostFocus"
+            Margin="5"/>
+
         <!-- Main Content -->
         <Grid DockPanel.Dock="Right">
             <RichTextBox x:Name="rtbContent"

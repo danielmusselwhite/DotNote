@@ -104,8 +104,6 @@ For a locally running desktop application intended for demonstration purposes, t
 
 - Could the DisplayNote and DisplayNotebook be done better, eg have the whole thing bound instead of having to set the context within? Check weather App and see
 
-- Add rename and delete options into the Note as well as Notebooks (probs just do after Firebase integration)
-
 - Hide passwords
 
 - Store user details (first name, etc.)
