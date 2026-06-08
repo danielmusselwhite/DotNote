@@ -59,7 +59,7 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 
 ### Azure Speech Configuration
 
-This portfolio project uses a gitignored `appsettings.json` file to store Azure Speech Service configuration values to ensure secrets remain secure.
+This portfolio project uses a gitignored `appsettings.json` file to store (Azure and Firebase) configuration values to ensure secrets remain secure.
 
 However, in a production environment, sensitive information such as API keys would typically be managed through environment variables, a secret management service, or a backend API. 
 
@@ -78,13 +78,7 @@ For a locally running desktop application intended for demonstration purposes, t
     "Region": "YOUR_REGION_HERE"
   },
   "Firebase": {
-    "ApiKey": "YOUR_KEY_HERE",
-    "AuthDomain": "NOT_NEEDED",
-    "ProjectId": "NOT_NEEDED",
-    "StorageBucket": "NOT_NEEDED",
-    "MessagingSenderId": "NOT_NEEDED",
-    "AppId": "NOT_NEEDED",
-    "MeasurementId": "NOT_NEEDED",
+    "ApiKey": "YOUR_WEBAPP_KEY_HERE",
     "DatabaseURL": "YOUR_DB_URL_HERE"
   }
 }
@@ -97,11 +91,6 @@ For a locally running desktop application intended for demonstration purposes, t
 
 
 ### Must Do
-
-- Add more modern implicit styles and/or a style resource
-
-- Hide passwords
-
 - Store and retrieve user details (first name, surname, etc.)
 
 - If no note selected, disable the notes tab
@@ -115,3 +104,5 @@ For a locally running desktop application intended for demonstration purposes, t
 - Probably add at least some unit tests
 
 - add a colour picker for the font colour?
+
+- maybe DI but that may be over engineering

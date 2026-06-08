@@ -16,7 +16,7 @@
         <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Password: "/>
-        <TextBox Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" />
 
         <Button Command="{Binding LoginCommand}"
                     CommandParameter="{Binding User}"

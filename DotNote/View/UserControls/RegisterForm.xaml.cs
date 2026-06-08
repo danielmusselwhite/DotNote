@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNote.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,18 @@ namespace DotNote.View.UserControls
         public RegisterForm()
         {
             InitializeComponent();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var VM = (LoginVM)DataContext;
+            VM.Password = ((PasswordBox)sender).Password;
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var VM = (LoginVM)DataContext;
+            VM.ConfirmPassword = ((PasswordBox)sender).Password;
         }
     }
 }

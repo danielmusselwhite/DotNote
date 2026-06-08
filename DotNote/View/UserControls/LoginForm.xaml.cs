@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNote.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,16 @@ namespace DotNote.View.UserControls
     /// </summary>
     public partial class LoginForm : UserControl
     {
+
         public LoginForm()
         {
             InitializeComponent();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            var VM = (LoginVM)DataContext;
+            VM.Password = ((PasswordBox)sender).Password;
         }
     }
 }
