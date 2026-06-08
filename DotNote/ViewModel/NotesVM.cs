@@ -4,6 +4,7 @@ using DotNote.ViewModel.Commands.Notes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace DotNote.ViewModel
 {
@@ -23,6 +24,8 @@ namespace DotNote.ViewModel
                 _ = GetNotes(); // is this okay as it is async?
             }
         }
+
+        ObservableCollection<FontFamily> FontFamilies;
 
         public ObservableCollection<Note> Notes { get; set; }
         private Note selectedNote;
@@ -67,6 +70,7 @@ namespace DotNote.ViewModel
         public DeleteNotebookCommand DeleteNotebookCommand { get; set; }
         public EditNotebookCommand EditNotebookCommand { get; set; }
         public EndEditNotebookCommand EndEditNotebookCommand { get; set; }
+        public ViewProfileCommand ViewProfileCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -77,9 +81,12 @@ namespace DotNote.ViewModel
             DeleteNotebookCommand = new DeleteNotebookCommand(this);
             EditNotebookCommand = new EditNotebookCommand(this);
             EndEditNotebookCommand = new EndEditNotebookCommand(this);
+            ViewProfileCommand = new ViewProfileCommand(this);
 
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
+
+            FontFamilies = new ObservableCollection<FontFamily>(Fonts.SystemFontFamilies.OrderBy(f => f.Source));
 
             IsNotebookEditVisible = Visibility.Collapsed;
         }
@@ -163,9 +170,16 @@ namespace DotNote.ViewModel
             }
         }
         #endregion
+
+        public void ViewProfile()
+        {
+            var profileWindow = new View.ProfileWindow();
+            profileWindow.ShowDialog();
+        }
+
         #endregion
 
-        #region Helpers
+            #region Helpers
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

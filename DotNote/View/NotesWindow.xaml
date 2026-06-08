@@ -24,9 +24,14 @@
                 <MenuItem Header="New Note" 
                           Command="{Binding NewNoteCommand}"
                           CommandParameter="{Binding SelectedNotebook}"/> <!-- Pass the selected notebook as a parameter -->
-                
+
                 <Separator/>
                 
+                <MenuItem Header="View Profile"
+                          Command="{Binding ViewProfileCommand}"/>
+                
+                <Separator/>
+
                 <MenuItem Header="Exit" 
                           Click="Exit_Click"/>
             </MenuItem>
@@ -111,6 +116,7 @@
                 </ToggleButton>
 
                 <ComboBox x:Name="cmbFontFamility"
+                          ItemsSource="{Binding }"
                           Width="100"
                           SelectionChanged="cmbFontFamility_SelectionChanged" />
 

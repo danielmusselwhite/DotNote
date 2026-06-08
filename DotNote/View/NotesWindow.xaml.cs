@@ -25,12 +25,6 @@ namespace DotNote.View
             VM = Resources["NotesVM"] as NotesVM; // assign to same instance of VM that's in XAML resources
             VM.SelectedNoteChanged += ViewModel_SelectedNoteChanged;
 
-            var fontFamilies = Fonts.SystemFontFamilies
-                .OrderBy(f => f.Source);
-
-            // todo - this should be done with data binding and a view model, but for the sake of time I'm doing it in code behind
-            cmbFontFamility.ItemsSource = fontFamilies;
-
             var fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
             cmbFontSize.ItemsSource = fontSizes;
         }

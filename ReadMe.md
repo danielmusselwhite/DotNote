@@ -91,14 +91,9 @@ For a locally running desktop application intended for demonstration purposes, t
 
 
 ### Must Do
-- Store and retrieve user details (first name, surname, etc.)
-
 - Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
 
 ### Optional
-
-- Add a edit user option?
-
 - Probably add at least some unit tests
 
 - add a colour picker for the font colour?

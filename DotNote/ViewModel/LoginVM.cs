@@ -140,8 +140,9 @@ namespace DotNote.ViewModel
         public async void PerformRegister()
         {
             var success = await FirebaseAuthHelper.Register(User);
+            await App.DbHelper.Insert(User); // store user details in Db
 
-            if(success) Authenticated?.Invoke(this, EventArgs.Empty);
+            if (success) Authenticated?.Invoke(this, EventArgs.Empty);
         }
         #endregion
 
