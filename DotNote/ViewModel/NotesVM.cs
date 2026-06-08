@@ -33,8 +33,14 @@ namespace DotNote.ViewModel
             { 
                 selectedNote = value;
                 OnPropertyChanged(nameof(SelectedNote));
+                OnPropertyChanged(nameof(IsNoteSelected));
                 SelectedNoteChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public bool IsNoteSelected
+        {
+            get { return SelectedNote != null; }
         }
 
 

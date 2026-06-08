@@ -93,11 +93,9 @@ For a locally running desktop application intended for demonstration purposes, t
 ### Must Do
 - Store and retrieve user details (first name, surname, etc.)
 
-- If no note selected, disable the notes tab
+- Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
 
 ### Optional
-
-- Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
 
 - Add a edit user option?
 

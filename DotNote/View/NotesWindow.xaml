@@ -138,13 +138,15 @@
             Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             FontSize="16"
             FontWeight="Bold"
-            LostFocus="TitleEdit_LostFocus"/>
+            LostFocus="TitleEdit_LostFocus"
+            IsEnabled="{Binding IsNoteSelected}"/>
 
         <!-- Main Content -->
         <Grid DockPanel.Dock="Right">
             <RichTextBox x:Name="rtbContent"
                          TextChanged="rtbContent_TextChanged"
-                         SelectionChanged="rtbContent_SelectionChanged"/>
+                         SelectionChanged="rtbContent_SelectionChanged"
+                         IsEnabled="{Binding IsNoteSelected}"/>
         </Grid>
     </DockPanel>
 </Window>
