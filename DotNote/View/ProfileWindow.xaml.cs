@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DotNote.Model;
+using DotNote.ViewModel.Login;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -17,10 +19,19 @@ namespace DotNote.View
     /// </summary>
     public partial class ProfileWindow : Window
     {
-        public ProfileWindow()
+        private ProfileVM VM;
+
+        public ProfileWindow(User user)
         {
             InitializeComponent();
+
+            VM = Resources["ProfileVM"] as ProfileVM;
+
+            VM.Email = user.Email;
+            VM.FirstName = user.FirstName;
+            VM.LastName = user.LastName;
         }
+        
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {

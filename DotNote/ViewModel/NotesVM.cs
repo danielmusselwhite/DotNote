@@ -171,9 +171,10 @@ namespace DotNote.ViewModel
         }
         #endregion
 
-        public void ViewProfile()
+        public async void ViewProfile()
         {
-            var profileWindow = new View.ProfileWindow();
+            var user = await App.DbHelper.GetById<User>(App.UserId);
+            var profileWindow = new View.ProfileWindow(user);
             profileWindow.ShowDialog();
         }
 

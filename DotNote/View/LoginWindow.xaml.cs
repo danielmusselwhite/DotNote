@@ -1,4 +1,4 @@
-﻿using DotNote.ViewModel;
+﻿using DotNote.ViewModel.Login;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
