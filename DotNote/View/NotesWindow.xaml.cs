@@ -1,8 +1,11 @@
-﻿using Azure.Storage.Blobs;
+﻿using AutoMapper;
+using Azure.Storage.Blobs;
 using DotNote.Configuration;
 using DotNote.ViewModel;
+using DotNote.ViewModel.Helpers.DatabaseHelpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -16,13 +19,23 @@ namespace DotNote.View
     /// </summary>
     public partial class NotesWindow : Window
     {
-        NotesVM VM;
+        #region dependencies
+        private readonly IMapper _mapper;
+        private readonly IDatabaseHelper _db;
+        #endregion
 
-        public NotesWindow()
+        private readonly NotesVM VM;
+
+        public NotesWindow(NotesVM vm, IMapper mapper, IDatabaseHelper db)
         {
             InitializeComponent();
 
-            VM = Resources["NotesVM"] as NotesVM; // assign to same instance of VM that's in XAML resources
+            VM = vm;
+            DataContext = VM;
+
+            _mapper = mapper;
+            _db = db;
+
             VM.SelectedNoteChanged += ViewModel_SelectedNoteChanged;
 
             var fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
@@ -37,7 +50,7 @@ namespace DotNote.View
 
             if (string.IsNullOrWhiteSpace(App.UserId))
             {
-                LoginWindow loginWindow = new LoginWindow();
+                var loginWindow = App.Services.GetRequiredService<LoginWindow>();
                 loginWindow.ShowDialog();
 
                 VM.GetNotebooks();
@@ -160,13 +173,13 @@ namespace DotNote.View
 
             // then upload the RTF file and get the URL, and save that URL in the Notes db record
             VM.SelectedNote.FileLocation = await UploadBlob(rtfFilePath, fileName);
-            await App.DbHelper.Update(VM.SelectedNote); // only update the Notes db record after successfully uploading the file, to avoid having a db record that points to a file that doesn't exist if the upload fails
+            await _db.Update(VM.SelectedNote); // only update the Notes db record after successfully uploading the file, to avoid having a db record that points to a file that doesn't exist if the upload fails
         }
 
         private async void TitleEdit_LostFocus(object sender, RoutedEventArgs e)
         {
             if (VM.SelectedNote == null) return;
-            await App.DbHelper.Update(VM.SelectedNote); // update the title
+            await _db.Update(VM.SelectedNote); // update the title
         }
 
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
@@ -192,7 +205,7 @@ namespace DotNote.View
                 }
             }
 
-            await App.DbHelper.Delete(VM.SelectedNote); // only delete the Notes db record after the file deletion was successful, to avoid orphaned files if the db record is deleted but the file isn't
+            await _db.Delete(VM.SelectedNote); // only delete the Notes db record after the file deletion was successful, to avoid orphaned files if the db record is deleted but the file isn't
 
             // refresh the notes list in the UI after deletion
             await VM.GetNotes();

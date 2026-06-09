@@ -1,4 +1,11 @@
-﻿using DotNote.ViewModel.Helpers.DatabaseHelpers;
+﻿using AutoMapper;
+using DotNote.Model;
+using DotNote.View;
+using DotNote.ViewModel;
+using DotNote.ViewModel.Helpers;
+using DotNote.ViewModel.Helpers.DatabaseHelpers;
+using DotNote.ViewModel.Login;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace DotNote
@@ -9,7 +16,52 @@ namespace DotNote
     public partial class App : Application
     {
         public static string UserId { get; set; } = string.Empty;
-        public static IDatabaseHelper DbHelper { get; private set; } = new FirebaseDbHelper();
+
+        public static IServiceProvider Services { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var services = new ServiceCollection();
+            
+            services.AddLogging();
+
+            ConfigureServices(services);
+
+            Services = services.BuildServiceProvider();
+
+            var mainWindow = Services.GetRequiredService<NotesWindow>();
+            mainWindow.Show();
+
+            base.OnStartup(e);
+        }
+
+        private void ConfigureServices(ServiceCollection services)
+        {
+            // Views
+            services.AddSingleton<NotesWindow>();
+            services.AddTransient<ProfileWindow>();
+            services.AddSingleton<LoginWindow>();
+
+            // ViewModels
+            services.AddTransient<NotesVM>();
+            services.AddTransient<ProfileVM>();
+            services.AddTransient<LoginVM>();
+
+            // AutoMapper
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<UserProfile>();
+            });
+
+            // Services
+            services.AddSingleton<FirebaseAuthHelper>();
+            services.AddSingleton<IDatabaseHelper, FirebaseDbHelper>();
+            services.AddSingleton<FirebaseDbHelper>();
+
+            // Factories for views with runtime args
+            services.AddTransient<Func<UserDetails, ProfileWindow>>(sp =>
+                user => ActivatorUtilities.CreateInstance<ProfileWindow>(sp, user));
+        }
     }
 
 }

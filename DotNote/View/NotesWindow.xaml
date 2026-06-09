@@ -11,11 +11,7 @@
         Icon="/favicon.ico"
         Title="Notes" Height="450" Width="800">
 
-    <Window.Resources>
-        <vm:NotesVM x:Key="NotesVM"/>
-    </Window.Resources>
-    
-    <DockPanel DataContext="{StaticResource NotesVM}">
+    <DockPanel DataContext="{Binding}">
         <!-- Main Menu -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -58,19 +54,19 @@
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename" 
-                                            Command="{Binding Source={StaticResource NotesVM}, Path=EditNotebookCommand}"/>
+                                            Command="{Binding DataContext.EditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                 <MenuItem Header="Delete" 
-                                            Command="{Binding Source={StaticResource NotesVM}, Path=DeleteNotebookCommand}"
+                                            Command="{Binding DataContext.DeleteNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                             CommandParameter="{Binding}"/>
                                     <!-- CommandParameter set so we know which Notebook we are updating -->
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
                         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Visibility="{Binding Source={StaticResource NotesVM}, Path=IsNotebookEditVisible}">
+                                 Visibility="{Binding DataContext.IsNotebookEditVisible, RelativeSource={RelativeSource AncestorType=Window}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource NotesVM}, Path=EndEditNotebookCommand}"
+                                    <i:InvokeCommandAction Command="{Binding DataContext.EndEditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}"/> <!-- CommandParameter set so we know which Notebook we are updating -->
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>

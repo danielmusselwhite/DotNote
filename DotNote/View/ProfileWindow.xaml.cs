@@ -19,13 +19,14 @@ namespace DotNote.View
     /// </summary>
     public partial class ProfileWindow : Window
     {
-        private ProfileVM VM;
+        private readonly ProfileVM VM;
 
-        public ProfileWindow(User user)
+        public ProfileWindow(ProfileVM vm, UserDetails user)
         {
             InitializeComponent();
 
-            VM = Resources["ProfileVM"] as ProfileVM;
+            VM = vm;
+            DataContext = VM;
 
             VM.Email = user.Email;
             VM.FirstName = user.FirstName;

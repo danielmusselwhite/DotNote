@@ -1,6 +1,10 @@
-﻿using DotNote.Model;
+﻿using AutoMapper;
+using DotNote.Model;
+using DotNote.View;
 using DotNote.ViewModel.Commands;
 using DotNote.ViewModel.Commands.Notes;
+using DotNote.ViewModel.Helpers;
+using DotNote.ViewModel.Helpers.DatabaseHelpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -10,6 +14,12 @@ namespace DotNote.ViewModel
 {
     public class NotesVM : INotifyPropertyChanged
     {
+        #region dependencies
+        private readonly IMapper _mapper;
+        private readonly IDatabaseHelper _db;
+        private readonly Func<UserDetails, ProfileWindow> _profileWindowFactory;
+        #endregion
+
         #region Properties
         public ObservableCollection<Notebook> Notebooks { get; set; }
         private Notebook selectedNotebook;
@@ -74,8 +84,15 @@ namespace DotNote.ViewModel
         #endregion
 
         #region Constructor
-        public NotesVM()
+        public NotesVM(
+            IMapper mapper,
+            IDatabaseHelper databaseHelper,
+            Func<UserDetails, ProfileWindow> profileWindowFactory)
         {
+            _mapper = mapper;
+            _db = databaseHelper;
+            _profileWindowFactory = profileWindowFactory;
+
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
             DeleteNotebookCommand = new DeleteNotebookCommand(this);
@@ -102,14 +119,14 @@ namespace DotNote.ViewModel
                 UserId = App.UserId
             };
 
-            await App.DbHelper.Insert(newNotebook);
+            await _db.Insert(newNotebook);
 
             GetNotebooks();
         }
 
         public async void GetNotebooks()
         {
-            var notebooks = (await App.DbHelper.GetAll<Notebook>())
+            var notebooks = (await _db.GetAll<Notebook>())
                 .Where(n => n.UserId == App.UserId)
                 .ToList();
 
@@ -128,14 +145,14 @@ namespace DotNote.ViewModel
         public async void StopEditingNotebook(Notebook notebook)
         {
             IsNotebookEditVisible = Visibility.Collapsed;
-            await App.DbHelper.Update(notebook);
+            await _db.Update(notebook);
             GetNotebooks();
         }
 
         public async void DeleteNotebook(Notebook notebook)
         {
             if (notebook == null) return;
-            await App.DbHelper.Delete(notebook);
+            await _db.Delete(notebook);
             GetNotebooks();
         }
         #endregion
@@ -151,7 +168,7 @@ namespace DotNote.ViewModel
                 UpdatedAt = DateTime.Now
             };
 
-            await App.DbHelper.Insert(newNote);
+            await _db.Insert(newNote);
 
             await GetNotes();
         }
@@ -160,7 +177,7 @@ namespace DotNote.ViewModel
         {
             if (SelectedNotebook == null || string.IsNullOrWhiteSpace(SelectedNotebook.Id)) return;
 
-            var notes = (await App.DbHelper.GetAll<Note>())
+            var notes = (await _db.GetAll<Note>())
                 .Where(n => n.NotebookId == SelectedNotebook.Id);
 
             Notes.Clear();
@@ -173,8 +190,9 @@ namespace DotNote.ViewModel
 
         public async void ViewProfile()
         {
-            var user = await App.DbHelper.GetById<User>(App.UserId);
-            var profileWindow = new View.ProfileWindow(user);
+            var user = (await _db.GetAll<UserDetails>())
+                .FirstOrDefault(u => u.UserId == App.UserId);
+            var profileWindow = _profileWindowFactory(user);
             profileWindow.ShowDialog();
         }
 

@@ -1,6 +1,9 @@
-﻿using DotNote.Model;
+﻿using AutoMapper;
+using DotNote.DTOs;
+using DotNote.Model;
 using DotNote.ViewModel.Commands.Login;
 using DotNote.ViewModel.Helpers;
+using DotNote.ViewModel.Helpers.DatabaseHelpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +15,13 @@ namespace DotNote.ViewModel.Login
 {
     public class LoginVM : UserVM
     {
+        #region dependencies
+        private readonly FirebaseAuthHelper _authHelper;
+        private readonly IDatabaseHelper _db;
+        private readonly IMapper _mapper;
+        #endregion
+
+        // events
         public event EventHandler Authenticated;
 
         #region Properties
@@ -24,13 +34,16 @@ namespace DotNote.ViewModel.Login
         public SwitchShownLoginViewCommand SwitchShownLoginViewCommand { get; set; }
         #endregion
 
-        public LoginVM()
+        public LoginVM(FirebaseAuthHelper authHelper, IDatabaseHelper dbHelper, IMapper mapper)
         {
+            _authHelper = authHelper;
+            _db = dbHelper;
+            _mapper = mapper;
+
             User = new User();
-            
+
             RegisterCommand = new RegisterCommand(this);
             LoginCommand = new LoginCommand(this);
-
             SwitchShownLoginViewCommand = new SwitchShownLoginViewCommand(this);
         }
 
@@ -44,19 +57,24 @@ namespace DotNote.ViewModel.Login
 
         public async void PerformLogin()
         {
-            var success = await FirebaseAuthHelper.Login(User);
+            var dto = _mapper.Map<FirebaseAuthDTO>(User);
+            var success = await _authHelper.Login(dto);
 
-            if (success) Authenticated?.Invoke(this, EventArgs.Empty);
+            if (success)
+                Authenticated?.Invoke(this, EventArgs.Empty);
         }
 
         public async void PerformRegister()
         {
-            var success = await FirebaseAuthHelper.Register(User);
+            var dto = _mapper.Map<FirebaseAuthDTO>(User);
+            var success = await _authHelper.Register(dto);
 
             if(success)
             {
-                User.Id = App.UserId; // set the user id to the one returned by firebase
-                await App.DbHelper.Insert(User); // store user details in Db
+                var profile = _mapper.Map<UserDetails>(User);
+
+                profile.UserId = App.UserId; // set the user id to the one returned by firebase
+                await _db.Insert(profile); // store user details in Db
             }
 
             if (success) Authenticated?.Invoke(this, EventArgs.Empty);

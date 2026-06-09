@@ -1,4 +1,5 @@
 ﻿using DotNote.Configuration;
+using DotNote.DTOs;
 using DotNote.Model;
 using Newtonsoft.Json;
 using System;
@@ -11,9 +12,9 @@ namespace DotNote.ViewModel.Helpers
 {
     public class FirebaseAuthHelper
     {
-        private static readonly HttpClient client = new HttpClient();
+        private readonly HttpClient client = new HttpClient();
 
-        public static Task<bool> Register(User user)
+        public Task<bool> Register(FirebaseAuthDTO user)
         {
             return Authenticate(
                 user,
@@ -21,7 +22,7 @@ namespace DotNote.ViewModel.Helpers
                 "Registration Failed");
         }
 
-        public static Task<bool> Login(User user)
+        public Task<bool> Login(FirebaseAuthDTO user)
         {
             return Authenticate(
                 user,
@@ -30,8 +31,8 @@ namespace DotNote.ViewModel.Helpers
         }
 
 
-        private static async Task<bool> Authenticate(
-            User user,
+        private async Task<bool> Authenticate(
+            FirebaseAuthDTO user,
             string endpoint,
             string errorTitle)
         {

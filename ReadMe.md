@@ -56,6 +56,8 @@ The application follows the MVVM (Model-View-ViewModel) architectural pattern, p
 * Firebase Realtime Data Storage
 * Azure Speech Services
 * Azure Blob Storage
+* Dependency Injection
+* AutoMapper
 
 ### Azure Speech Configuration
 
@@ -97,5 +99,3 @@ For a locally running desktop application intended for demonstration purposes, t
 - Probably add at least some unit tests
 
 - add a colour picker for the font colour?
-
-- maybe DI but that may be over engineering

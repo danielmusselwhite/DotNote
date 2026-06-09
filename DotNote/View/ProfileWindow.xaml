@@ -8,12 +8,6 @@
         mc:Ignorable="d"
         Title="Profile" Height="300" Width="300">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <vm:ProfileVM x:Key="ProfileVM"/>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <StackPanel Margin="10">
         <TextBlock Text="Email: "/>
         <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Focusable="False"/>
