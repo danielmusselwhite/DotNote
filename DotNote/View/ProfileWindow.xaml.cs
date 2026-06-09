@@ -25,18 +25,27 @@ namespace DotNote.View
         {
             InitializeComponent();
 
+            // todo - should UserDetails be injected in the ProfileVM instead of ProfileWindow so this logic can be placed in the ProfileVM's constructor instead?
             VM = vm;
             DataContext = VM;
 
             VM.Email = user.Email;
             VM.FirstName = user.FirstName;
             VM.LastName = user.LastName;
+            VM.UserId = user.UserId;
+            VM.ProfileId = user.Id;
+
+            VM.ProfileUpdated += VM_ProfileUpdated;
         }
-        
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
+        }
+
+        private void VM_ProfileUpdated(object? sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -1,16 +1,13 @@
 # DotNote
 
-`TODO - give this a better summary once completed`
-
 A desktop note-taking application inspired by Evernote. Users can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar.
 
 ## Features
 
-`TODO - add to this as I add more features`
-
 * User auth provided through Firebase Authentication
 * Create and manage notebooks
 * Create, edit, and delete notes
+* Create, and edit User Profile
 * Rich text editing and formatting
 * Remote data persistence using Firebase Realtime Database
 * Remote file persistence using Azure Blob Storage
@@ -29,7 +26,7 @@ A desktop note-taking application inspired by Evernote. Users can create noteboo
 ### Data Model
 
 ```text
-User
+User 1 - 1 UserDetails
  1
  └── * Notebooks
         1
@@ -40,6 +37,7 @@ Relationships:
 
 * One User → Many Notebooks
 * One Notebook → Many Notes
+* One User → One UserDetails
 
 ### Design Pattern
 
@@ -90,7 +88,6 @@ For a locally running desktop application intended for demonstration purposes, t
 4. Build and run the application.
 
 ## Possible extensions
-
 
 ### Must Do
 - Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
