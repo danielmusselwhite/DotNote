@@ -1,8 +1,8 @@
 ﻿namespace DotNote.Model
 {
-    public class User
+    public class User : IHasId
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

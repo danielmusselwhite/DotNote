@@ -11,5 +11,6 @@ namespace DotNote.ViewModel.Helpers.DatabaseHelpers
         public Task<bool> Delete<T>(T item) where T : IHasId, new();
 
         public Task<List<T>> GetAll<T>() where T : IHasId, new();
+        public Task<T> GetById<T>(string id) where T : IHasId, new();
     }
 }

@@ -1,31 +1,24 @@
 ﻿using DotNote.Model;
-using DotNote.ViewModel.Commands.Login;
-using DotNote.ViewModel.Helpers;
-using System;
-using System.Collections.Generic;
+using DotNote.ViewModel.Commands;
+using DotNote.ViewModel.Commands.Notes;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 using System.Windows;
-using System.Windows.Media.Animation;
 
-namespace DotNote.ViewModel
+namespace DotNote.ViewModel.Login
 {
-    public class LoginVM : INotifyPropertyChanged
+    public abstract class UserVM : INotifyPropertyChanged
     {
-        public event EventHandler Authenticated;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-
         #region Properties
-        public bool IsShowingRegister { get; set; }
-
         private User user;
 
         public User User
         {
             get { return user; }
-            set 
-            { 
+            set
+            {
                 user = value;
                 OnPropertyChanged(nameof(User));
             }
@@ -35,8 +28,8 @@ namespace DotNote.ViewModel
         public string Email
         {
             get { return email; }
-            set 
-            { 
+            set
+            {
                 email = value;
                 UpdateUser();
                 OnPropertyChanged(nameof(Email));
@@ -47,8 +40,8 @@ namespace DotNote.ViewModel
         public string Password
         {
             get { return password; }
-            set 
-            { 
+            set
+            {
                 password = value;
                 UpdateUser();
                 OnPropertyChanged(nameof(Password));
@@ -59,8 +52,8 @@ namespace DotNote.ViewModel
         public string FirstName
         {
             get { return firstName; }
-            set 
-            { 
+            set
+            {
                 firstName = value;
                 UpdateUser();
                 OnPropertyChanged(nameof(FirstName));
@@ -71,8 +64,8 @@ namespace DotNote.ViewModel
         public string LastName
         {
             get { return lastName; }
-            set 
-            { 
+            set
+            {
                 lastName = value;
                 UpdateUser();
                 OnPropertyChanged(nameof(LastName));
@@ -92,22 +85,6 @@ namespace DotNote.ViewModel
         }
         #endregion
 
-        #region Commands
-        public RegisterCommand RegisterCommand { get; set; }
-        public LoginCommand LoginCommand { get; set; }
-        public SwitchShownLoginViewCommand SwitchShownLoginViewCommand { get; set; }
-        #endregion
-
-        public LoginVM()
-        {
-            User = new User();
-            
-            RegisterCommand = new RegisterCommand(this);
-            LoginCommand = new LoginCommand(this);
-
-            SwitchShownLoginViewCommand = new SwitchShownLoginViewCommand(this);
-        }
-
         #region Helpers
         private void UpdateUser()
         {
@@ -119,29 +96,6 @@ namespace DotNote.ViewModel
                 LastName = this.LastName,
                 ConfirmPassword = this.ConfirmPassword
             };
-        }
-        #endregion
-
-        #region Command Handlers
-        public void SwitchViews()
-        {
-            IsShowingRegister = !IsShowingRegister;
-
-            OnPropertyChanged(nameof(IsShowingRegister));
-        }
-
-        public async void PerformLogin()
-        {
-            var success = await FirebaseAuthHelper.Login(User);
-
-            if (success) Authenticated?.Invoke(this, EventArgs.Empty);
-        }
-
-        public async void PerformRegister()
-        {
-            var success = await FirebaseAuthHelper.Register(User);
-
-            if(success) Authenticated?.Invoke(this, EventArgs.Empty);
         }
         #endregion
 

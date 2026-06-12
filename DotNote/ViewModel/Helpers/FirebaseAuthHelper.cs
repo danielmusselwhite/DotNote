@@ -1,8 +1,11 @@
 ﻿using DotNote.Configuration;
+using DotNote.DTOs;
 using DotNote.Model;
+using Microsoft.CognitiveServices.Speech.Transcription;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
@@ -11,9 +14,9 @@ namespace DotNote.ViewModel.Helpers
 {
     public class FirebaseAuthHelper
     {
-        private static readonly HttpClient client = new HttpClient();
+        private readonly HttpClient client = new HttpClient();
 
-        public static Task<bool> Register(User user)
+        public Task<bool> Register(FirebaseAuthDTO user)
         {
             return Authenticate(
                 user,
@@ -21,7 +24,7 @@ namespace DotNote.ViewModel.Helpers
                 "Registration Failed");
         }
 
-        public static Task<bool> Login(User user)
+        public Task<bool> Login(FirebaseAuthDTO user)
         {
             return Authenticate(
                 user,
@@ -30,8 +33,8 @@ namespace DotNote.ViewModel.Helpers
         }
 
 
-        private static async Task<bool> Authenticate(
-            User user,
+        private async Task<bool> Authenticate(
+            FirebaseAuthDTO user,
             string endpoint,
             string errorTitle)
         {
@@ -57,8 +60,25 @@ namespace DotNote.ViewModel.Helpers
             }
 
             var result = JsonConvert.DeserializeObject<FirebaseResponse>(resultJson);
-            App.UserId = result.localId; // store the user id for use in the app
+            App.LoggedInUser = result; // store the user id for use in the app
             return true;
+        }
+
+        public async Task<bool> SendPasswordReset(string userEmail)
+        {
+            var apiKey = AppSettings.Firebase.ApiKey;
+
+            var body = new
+            {
+                requestType = "PASSWORD_RESET",
+                email = userEmail
+            };
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var data = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={apiKey}", data);
+
+            return response.IsSuccessStatusCode;
         }
 
         #region Firebase Response Data Models

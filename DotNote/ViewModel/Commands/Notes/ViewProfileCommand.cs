@@ -1,43 +1,34 @@
 ﻿using DotNote.Model;
-using DotNote.ViewModel.Login;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace DotNote.ViewModel.Commands.Login
+namespace DotNote.ViewModel.Commands.Notes
 {
-    public class LoginCommand : ICommand
+    public class ViewProfileCommand : ICommand
     {
-        public LoginVM VM { get; set; }
-
         public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public LoginCommand(LoginVM vm)
+        public NotesVM VM { get; set; }
+
+        public ViewProfileCommand(NotesVM vm)
         {
             VM = vm;
         }
 
         public bool CanExecute(object? parameter)
         {
-            User user = parameter as User;
-
-            if (user == null
-                || string.IsNullOrWhiteSpace(user.Email)
-                || string.IsNullOrWhiteSpace(user.Password)) 
-                return false;
-
-
             return true;
         }
 
         public void Execute(object? parameter)
         {
-            VM.PerformLogin();
+            VM.ViewProfile();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DotNote.Model;
+using DotNote.ViewModel.Login;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,11 @@ namespace DotNote.ViewModel.Commands.Login
     {
         public LoginVM VM { get; set; }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public RegisterCommand(LoginVM vm)
         {

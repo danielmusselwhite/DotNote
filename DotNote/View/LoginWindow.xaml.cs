@@ -1,4 +1,4 @@
-﻿using DotNote.ViewModel;
+﻿using DotNote.ViewModel.Login;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,13 +20,17 @@ namespace DotNote.View
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private LoginVM VM;
+        #region Dependencies
+        private readonly LoginVM VM;
+        #endregion
 
-        public LoginWindow()
+        public LoginWindow(LoginVM vm)
         {
             InitializeComponent();
-        
-            VM = Resources["LoginVM"] as LoginVM;
+
+            VM = vm;
+            DataContext = VM;
+
             VM.Authenticated += ViewModel_Authenticated;
 
             VM.PropertyChanged += Vm_PropertyChanged;

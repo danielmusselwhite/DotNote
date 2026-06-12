@@ -7,7 +7,11 @@ namespace DotNote.ViewModel.Commands.Notes
 {
     public class EditNotebookCommand : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public NotesVM VM { get; set; }
 

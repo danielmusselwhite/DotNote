@@ -4,21 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:vm="clr-namespace:DotNote.ViewModel"
+        xmlns:vm="clr-namespace:DotNote.ViewModel.Login"
         xmlns:local="clr-namespace:DotNote.View"
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         mc:Ignorable="d"
         Icon="/favicon.ico"
         Title="Notes" Height="300" Width="440">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <vm:LoginVM x:Key="LoginVM"/>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid x:Name="MainGrid"
-          DataContext="{StaticResource LoginVM}"
+          DataContext="{Binding}"
           ClipToBounds="True">
 
         <uc:LoginForm x:Name="LoginPanel">

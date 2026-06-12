@@ -1,8 +1,7 @@
 ﻿<Application x:Class="DotNote.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DotNote"
-             StartupUri="View/NotesWindow.xaml">
+             xmlns:local="clr-namespace:DotNote">
     <Application.Resources>
 
         <!-- Button colors -->

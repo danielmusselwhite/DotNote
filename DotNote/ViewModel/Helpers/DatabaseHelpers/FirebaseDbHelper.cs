@@ -67,5 +67,22 @@ namespace DotNote.ViewModel.Helpers.DatabaseHelpers
             
             return list;
         }
+
+        public async Task<T> GetById<T>(string id) where T : IHasId, new()
+        {
+            var response = await client.GetAsync($"{dbPath}/{typeof(T).Name.ToLower()}/{id}.json"); // Send to endpoint based on type name + the Id of the item to get (e.g. "notebooks/{id}", "notes/{id}")
+
+            if (!response.IsSuccessStatusCode) return default;
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+
+            var item = JsonConvert.DeserializeObject<T>(responseJson);
+            if (item != null)
+            {
+                item.Id = id; // assign the Firebase-generated key as the Id of the object
+            }
+
+            return item;
+        }
     }
 }

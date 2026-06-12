@@ -57,5 +57,16 @@ namespace DotNote.ViewModel.Helpers.DatabaseHelpers
 
             return items;
         }
+
+        public Task<T> GetById<T>(string id) where T : IHasId, new()
+        {
+            T item = default;
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>(); // ensure table exists
+                item = conn.Table<T>().FirstOrDefault(i => i.Id == id);
+            }
+            return Task.FromResult(item);
+        }
     }
 }
