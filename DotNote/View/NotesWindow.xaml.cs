@@ -48,7 +48,7 @@ namespace DotNote.View
         {
             base.OnActivated(e);
 
-            if (string.IsNullOrWhiteSpace(App.UserId))
+            if (string.IsNullOrWhiteSpace(App.LoggedInUser?.localId))
             {
                 var loginWindow = App.Services.GetRequiredService<LoginWindow>();
                 loginWindow.ShowDialog();

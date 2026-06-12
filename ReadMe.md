@@ -4,7 +4,7 @@ A desktop note-taking application inspired by Evernote. Users can create noteboo
 
 ## Features
 
-* User auth provided through Firebase Authentication
+* User auth provided through Firebase Authentication (register, login, reset password)
 * Create and manage notebooks
 * Create, edit, and delete notes
 * Create, and edit User Profile
@@ -91,6 +91,8 @@ For a locally running desktop application intended for demonstration purposes, t
 
 ### Must Do
 - Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
+
+- Add some styles eg "CancelButton" "PrimaryButton (default one)" "SecondaryButton"
 
 ### Optional
 - Probably add at least some unit tests

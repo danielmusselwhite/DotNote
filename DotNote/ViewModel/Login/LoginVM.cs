@@ -68,16 +68,16 @@ namespace DotNote.ViewModel.Login
         {
             var dto = _mapper.Map<FirebaseAuthDTO>(User);
             var success = await _authHelper.Register(dto);
+            if (!success || string.IsNullOrEmpty(App.LoggedInUser?.localId)) return;
 
-            if(success)
+            if (success)
             {
                 var profile = _mapper.Map<UserDetails>(User);
 
-                profile.UserId = App.UserId; // set the user id to the one returned by firebase
+                profile.UserId = App.LoggedInUser!.localId; // set the user id to the one returned by firebase
                 await _db.Insert(profile); // store user details in Db
+                Authenticated?.Invoke(this, EventArgs.Empty); // trigger authenticated event to navigate to main view
             }
-
-            if (success) Authenticated?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

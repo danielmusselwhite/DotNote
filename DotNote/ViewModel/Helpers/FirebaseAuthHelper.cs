@@ -1,9 +1,11 @@
 ﻿using DotNote.Configuration;
 using DotNote.DTOs;
 using DotNote.Model;
+using Microsoft.CognitiveServices.Speech.Transcription;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows;
@@ -58,8 +60,25 @@ namespace DotNote.ViewModel.Helpers
             }
 
             var result = JsonConvert.DeserializeObject<FirebaseResponse>(resultJson);
-            App.UserId = result.localId; // store the user id for use in the app
+            App.LoggedInUser = result; // store the user id for use in the app
             return true;
+        }
+
+        public async Task<bool> SendPasswordReset(string userEmail)
+        {
+            var apiKey = AppSettings.Firebase.ApiKey;
+
+            var body = new
+            {
+                requestType = "PASSWORD_RESET",
+                email = userEmail
+            };
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var data = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={apiKey}", data);
+
+            return response.IsSuccessStatusCode;
         }
 
         #region Firebase Response Data Models

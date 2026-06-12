@@ -35,7 +35,7 @@ namespace DotNote.View
             VM.UserId = user.UserId;
             VM.ProfileId = user.Id;
 
-            VM.ProfileUpdated += VM_ProfileUpdated;
+            VM.ProfileUpdateFinished += VM_ProfileUpdateFinished;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -43,7 +43,7 @@ namespace DotNote.View
             Close();
         }
 
-        private void VM_ProfileUpdated(object? sender, EventArgs e)
+        private void VM_ProfileUpdateFinished(object? sender, EventArgs e)
         {
             Close();
         }

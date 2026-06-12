@@ -9,7 +9,11 @@ namespace DotNote.ViewModel.Commands.Profiles
 {
     public class UpdatePasswordCommand : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public ProfileVM VM { get; set; }
 

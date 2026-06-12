@@ -9,7 +9,11 @@ namespace DotNote.ViewModel.Commands.Profiles
 {
     public class SaveProfileCommand : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public ProfileVM VM { get; set; }
 
@@ -20,7 +24,16 @@ namespace DotNote.ViewModel.Commands.Profiles
 
         public bool CanExecute(object? parameter)
         {
-            return true; // todo - modify this so can only be saved if name has value
+            ProfileVM profile = parameter as ProfileVM;
+
+            if (profile == null
+                || string.IsNullOrWhiteSpace(profile.Email)
+                || string.IsNullOrWhiteSpace(profile.FirstName)
+                || string.IsNullOrWhiteSpace(profile.LastName)
+                )
+                return false;
+
+            return true;
         }
 
         public async void Execute(object? parameter)

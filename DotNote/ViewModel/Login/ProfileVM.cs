@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DotNote.Model;
+using DotNote.View.UserControls;
 using DotNote.ViewModel.Commands;
 using DotNote.ViewModel.Commands.Notes;
 using DotNote.ViewModel.Commands.Profiles;
@@ -16,10 +17,11 @@ namespace DotNote.ViewModel.Login
         #region dependencies
         private readonly IDatabaseHelper _db;
         private readonly IMapper _mapper;
+        private readonly FirebaseAuthHelper _auth;
         #endregion
 
         #region events
-        public event EventHandler ProfileUpdated;
+        public event EventHandler ProfileUpdateFinished;
         #endregion
 
         #region properties
@@ -44,11 +46,12 @@ namespace DotNote.ViewModel.Login
         #endregion
 
 
-        public ProfileVM(IDatabaseHelper db, IMapper mapper)
+        public ProfileVM(IDatabaseHelper db, IMapper mapper, FirebaseAuthHelper auth)
         {
             _db = db;
             _mapper = mapper;
-            
+            _auth = auth;
+
             SaveProfileCommand = new SaveProfileCommand(this);
             UpdatePasswordCommand = new UpdatePasswordCommand(this);
         }
@@ -60,12 +63,14 @@ namespace DotNote.ViewModel.Login
             profile.UserId = UserId;
             profile.Id = ProfileId;
             await _db.Update(_mapper.Map<UserDetails>(profile));
-            ProfileUpdated.Invoke(this, EventArgs.Empty);
+            ProfileUpdateFinished.Invoke(this, EventArgs.Empty);
         }
 
-        internal void UpdatePassword()
+        internal async void UpdatePassword()
         {
-            throw new NotImplementedException();
+            var success = await _auth.SendPasswordReset(App.LoggedInUser!.email);
+            if (!success) MessageBox.Show("Failed To Send Password Reset Email, Please Try Again Later");
+            else MessageBox.Show("Password Reset Email Sent");
         }
     }
 }

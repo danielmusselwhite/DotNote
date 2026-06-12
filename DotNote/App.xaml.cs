@@ -7,6 +7,7 @@ using DotNote.ViewModel.Helpers.DatabaseHelpers;
 using DotNote.ViewModel.Login;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using static DotNote.ViewModel.Helpers.FirebaseAuthHelper;
 
 namespace DotNote
 {
@@ -15,7 +16,7 @@ namespace DotNote
     /// </summary>
     public partial class App : Application
     {
-        public static string UserId { get; set; } = string.Empty;
+        public static FirebaseResponse? LoggedInUser = null;
 
         public static IServiceProvider Services { get; private set; }
 

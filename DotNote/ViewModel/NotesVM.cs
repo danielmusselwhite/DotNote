@@ -116,7 +116,7 @@ namespace DotNote.ViewModel
             Notebook newNotebook = new Notebook
             {
                 Name = "New Notebook",
-                UserId = App.UserId
+                UserId = App.LoggedInUser!.localId
             };
 
             await _db.Insert(newNotebook);
@@ -127,7 +127,7 @@ namespace DotNote.ViewModel
         public async void GetNotebooks()
         {
             var notebooks = (await _db.GetAll<Notebook>())
-                .Where(n => n.UserId == App.UserId)
+                .Where(n => n.UserId == App.LoggedInUser!.localId)
                 .ToList();
 
             Notebooks.Clear();
@@ -191,7 +191,7 @@ namespace DotNote.ViewModel
         public async void ViewProfile()
         {
             var user = (await _db.GetAll<UserDetails>())
-                .FirstOrDefault(u => u.UserId == App.UserId);
+                .FirstOrDefault(u => u.UserId == App.LoggedInUser!.localId);
             var profileWindow = _profileWindowFactory(user);
             profileWindow.ShowDialog();
         }
