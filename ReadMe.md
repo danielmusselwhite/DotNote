@@ -94,6 +94,4 @@ For a locally running desktop application intended for demonstration purposes, t
 - Add some styles eg "CancelButton" "PrimaryButton (default one)" "SecondaryButton"
 
 ### Optional
-- Probably add at least some unit tests
-
 - add a colour picker for the font colour?

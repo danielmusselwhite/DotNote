@@ -17,9 +17,37 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
 
-    <DockPanel DataContext="{Binding}">
+    <Grid>
+
+        <!-- Column layout -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="140"
+                    MinWidth="100"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="140"
+                    MinWidth="100"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Row layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Menu -->
+            <RowDefinition Height="Auto"/>
+            <!-- Toolbar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="*"/>
+            <!-- Main content -->
+            <RowDefinition Height="Auto"/>
+            <!-- Status bar -->
+        </Grid.RowDefinitions>
+
+
         <!-- Main Menu -->
-        <Menu DockPanel.Dock="Top">
+        <Menu Grid.Row="0"
+                Grid.ColumnSpan="5">
             <MenuItem Header="File">
                 <MenuItem Header="New Notebook" 
                           Command="{Binding NewNotebookCommand}" />
@@ -40,16 +68,18 @@
         </Menu>
 
         <!-- Status Bar -->
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar Grid.Row="4"
+                Grid.ColumnSpan="5">
             <StatusBarItem>
                 <TextBlock x:Name="txtStatusMessage"/>
             </StatusBarItem>
         </StatusBar>
 
         <!-- NoteBooks -->
-        <ListView DockPanel.Dock="Left"
+        <ListView Grid.Row="3"
+                Grid.Column="0"
                   Background="SkyBlue"
-                  Width="140"
+                  HorizontalAlignment="Stretch"
                   ItemsSource="{Binding NotebookVMs}"
                   SelectedValue="{Binding SelectedNotebookVM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   >
@@ -87,9 +117,14 @@
             </ListView.ItemTemplate>
         </ListView>
 
+        <!-- Resizable Splitter Notebook & Notes -->
+        <GridSplitter Grid.Row="3"
+                      Grid.Column="1"/>
+
         <!-- Notes -->
-        <ListView DockPanel.Dock="Left"
-                  Width="140"
+        <ListView Grid.Row="3"
+                Grid.Column="2"
+                  HorizontalAlignment="Stretch"
                   Background="AliceBlue"
                   ItemsSource="{Binding Notes}"
                   SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -100,66 +135,77 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        <!-- Toolbar -->
-        <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar>
-                <Button Click="speechButton_Click"
-                    FontFamily="Segoe Fluent Icons"
-                    Content="&#xE720;"
-                    ToolTip="Speech to Text" />
-                
-                <ToggleButton x:Name="boldButton" Click="boldButton_Click">
-                    <TextBlock Text="B"
-                               FontWeight="Bold"/>
-                </ToggleButton>
-                <ToggleButton x:Name="italicButton" Click="italicButton_Click">
-                    <TextBlock Text="I"
-                               FontStyle="Italic"/>
-                </ToggleButton>
-                <ToggleButton x:Name="underlineButton" Click="underlineButton_Click">
-                    <TextBlock Text="U"
-                               TextDecorations="Underline"/>
-                </ToggleButton>
 
-                <ComboBox x:Name="cmbFontFamility"
-                          ItemsSource="{Binding }"
-                          Width="100"
-                          SelectionChanged="cmbFontFamility_SelectionChanged" />
+        <!-- Resizable Splitter Notes & Content -->
+        <GridSplitter Grid.Row="3"
+                      Grid.Column="3"/>
 
-                <ComboBox x:Name="cmbFontSize"
-                          Width="50"
-                          IsEditable="True"
-                          Margin="5,0,0,0"
-                          TextBoxBase.TextChanged="cmbFontSize_TextChanged" />
-                
-                <Button Click="saveButton_Click"
-                    FontFamily="Segoe Fluent Icons"
-                    Content="&#xE74E;"
-                    ToolTip="Save" />
-
-                
-                <Button Click="deleteButton_Click"
-                    FontFamily="Segoe Fluent Icons"
-                    Content="&#xE74D;"
-                    ToolTip="Delete" />
-            </ToolBar>
-        </ToolBarTray>
-        
         <!-- Title Edit Box -->
-        <TextBox DockPanel.Dock="Top"
-            Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            FontSize="16"
-            FontWeight="Bold"
-            LostFocus="TitleEdit_LostFocus"
-            IsEnabled="{Binding IsNoteSelected}"/>
 
         <!-- Main Content -->
-        <Grid DockPanel.Dock="Right">
+        <DockPanel Grid.Row="3"
+                   Grid.Column="4">
+
+            <!-- Toolbar -->
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Click="speechButton_Click"
+                            FontFamily="Segoe Fluent Icons"
+                            Content="&#xE720;"
+                            ToolTip="Speech to Text"/>
+
+                    <ToggleButton x:Name="boldButton"
+                            Click="boldButton_Click">
+                        <TextBlock Text="B"
+                                   FontWeight="Bold"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="italicButton"
+                            Click="italicButton_Click">
+                        <TextBlock Text="I"
+                                   FontStyle="Italic"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="underlineButton"
+                            Click="underlineButton_Click">
+                        <TextBlock Text="U"
+                                   TextDecorations="Underline"/>
+                    </ToggleButton>
+
+                    <ComboBox x:Name="cmbFontFamility"
+                              ItemsSource="{Binding FontFamilies}"
+                              Width="100"
+                              SelectionChanged="cmbFontFamility_SelectionChanged"/>
+
+                    <ComboBox x:Name="cmbFontSize"
+                              ItemsSource="{Binding FontSizes}"
+                              Width="50"
+                              IsEditable="True"
+                              Margin="5,0,0,0"
+                              TextBoxBase.TextChanged="cmbFontSize_TextChanged"/>
+
+                    <Button Click="saveButton_Click"
+                            FontFamily="Segoe Fluent Icons"
+                            Content="&#xE74E;"
+                            ToolTip="Save"/>
+
+
+                    <Button Click="deleteButton_Click"
+                            FontFamily="Segoe Fluent Icons"
+                            Content="&#xE74D;"
+                            ToolTip="Delete"/>
+                </ToolBar>
+            </ToolBarTray>
+
+            <TextBox DockPanel.Dock="Top"
+                     Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="16"
+                     FontWeight="Bold"
+                     LostFocus="TitleEdit_LostFocus"
+                     IsEnabled="{Binding IsNoteSelected}"/>
+
             <RichTextBox x:Name="rtbContent"
                          TextChanged="rtbContent_TextChanged"
                          SelectionChanged="rtbContent_SelectionChanged"
                          IsEnabled="{Binding IsNoteSelected}"/>
-        </Grid>
-    </DockPanel>
+        </DockPanel>
+    </Grid>
 </Window>

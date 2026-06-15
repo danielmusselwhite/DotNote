@@ -35,7 +35,9 @@ namespace DotNote.ViewModel
             }
         }
 
-        ObservableCollection<FontFamily> FontFamilies;
+        public ObservableCollection<FontFamily> FontFamilies { get; set; }
+
+        public ObservableCollection<int> FontSizes { get; set; }
 
         public ObservableCollection<Note> Notes { get; set; }
         private Note selectedNote;
@@ -94,6 +96,7 @@ namespace DotNote.ViewModel
             Notes = new ObservableCollection<Note>();
 
             FontFamilies = new ObservableCollection<FontFamily>(Fonts.SystemFontFamilies.OrderBy(f => f.Source));
+            FontSizes = new ObservableCollection<int>(new int[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 });
         }
         #endregion
 
