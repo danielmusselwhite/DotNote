@@ -8,6 +8,7 @@
         xmlns:local="clr-namespace:DotNote.View"
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         xmlns:vm="clr-namespace:DotNote.ViewModel"
+        xmlns:ui="clr-namespace:DotNote.ViewModel.Helpers.UiHelpers"
         mc:Ignorable="d"
         Icon="/favicon.ico"
         Title="Notes" Height="450" Width="800">
@@ -58,12 +59,12 @@
                         <uc:DisplayNotebook Notebook="{Binding}">
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Rename" 
-                                            Command="{Binding DataContext.EditNotebookCommand, Source={x:Reference windowNotes}}"
-                                            CommandParameter="{Binding}"/>
-                                <MenuItem Header="Delete" 
-                                            Command="{Binding DataContext.DeleteNotebookCommand, Source={x:Reference windowNotes}}"
-                                            CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Rename"
+                                        Command="{Binding DataContext.EditNotebookCommand, Source={x:Reference windowNotes}}"
+                                        CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Delete"
+                                              Command="{Binding DataContext.DeleteNotebookCommand, Source={x:Reference windowNotes}}"
+                                              CommandParameter="{Binding}"/>
                                     <!-- CommandParameter set so we know which Notebook we are updating -->
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
@@ -71,7 +72,9 @@
 
                         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding IsRenaming,
-                            Converter={StaticResource BoolToVisibilityConverter}}">
+                            Converter={StaticResource BoolToVisibilityConverter}}"
+                                 ui:FocusExtension.IsFocused="{Binding IsRenaming}">
+
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
                                     <i:InvokeCommandAction Command="{Binding DataContext.EndEditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
