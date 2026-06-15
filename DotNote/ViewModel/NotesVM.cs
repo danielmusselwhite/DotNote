@@ -109,10 +109,10 @@ namespace DotNote.ViewModel
 
             await _db.Insert(newNotebook);
 
-            GetNotebooks();
+            await GetNotebooks();
         }
 
-        public async void GetNotebooks()
+        public async Task GetNotebooks()
         {
             var notebooks = (await _db.GetAll<Notebook>())
                 .Where(n => n.UserId == App.LoggedInUser!.localId)
@@ -150,7 +150,7 @@ namespace DotNote.ViewModel
         {
             if (notebookVM == null) return;
             await _db.Delete(notebookVM.Model);
-            GetNotebooks();
+            await GetNotebooks();
         }
         #endregion
 

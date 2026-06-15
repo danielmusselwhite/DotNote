@@ -44,7 +44,7 @@ namespace DotNote.View
 
         #region LifeCycle Methods
 
-        protected override void OnActivated(EventArgs e)
+        protected override async void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
 
@@ -53,7 +53,7 @@ namespace DotNote.View
                 var loginWindow = App.Services.GetRequiredService<LoginWindow>();
                 loginWindow.ShowDialog();
 
-                VM.GetNotebooks();
+                await VM.GetNotebooks();
             }
         }
 

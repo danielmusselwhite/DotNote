@@ -1,4 +1,5 @@
 ﻿<Window x:Class="DotNote.View.NotesWindow"
+        x:Name="windowNotes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -58,15 +59,16 @@
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename" 
-                                            Command="{Binding DataContext.EditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}" />
+                                            Command="{Binding DataContext.EditNotebookCommand, Source={x:Reference windowNotes}}"
+                                            CommandParameter="{Binding}"/>
                                 <MenuItem Header="Delete" 
-                                            Command="{Binding DataContext.DeleteNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            Command="{Binding DataContext.DeleteNotebookCommand, Source={x:Reference windowNotes}}"
                                             CommandParameter="{Binding}"/>
                                     <!-- CommandParameter set so we know which Notebook we are updating -->
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
+
                         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding IsRenaming,
                             Converter={StaticResource BoolToVisibilityConverter}}">

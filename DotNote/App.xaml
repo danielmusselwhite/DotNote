@@ -20,6 +20,7 @@
         <SolidColorBrush x:Key="ButtonDisabledBrush"
                          Color="{StaticResource ButtonDisabledColor}"/>
 
+        <!-- Default Component Styles -->
         <Style TargetType="Button">
             <Setter Property="Background"
                     Value="{StaticResource ButtonBaseBrush}"/>
