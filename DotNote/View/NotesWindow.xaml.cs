@@ -173,6 +173,7 @@ namespace DotNote.View
             var family = cmb?.SelectedItem as FontFamily;
 
             if (family == null) return;
+            if (!cmbFontSize.IsKeyboardFocusWithin) return; // check user updated it, so we don't apply update when modified to show the clicked elements styles
 
             rtbContent.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, family);
         }
@@ -180,9 +181,11 @@ namespace DotNote.View
         private void cmbFontSize_TextChanged(object sender, TextChangedEventArgs e)
         {
             var cmb = sender as ComboBox;
-            if (cmb == null) return;
 
-            if(double.TryParse(cmb.Text,out double fontSize))
+            if (cmb == null) return;
+            if (!cmbFontSize.IsKeyboardFocusWithin) return; // check user updated it, so we don't apply update when modified to show the clicked elements styles
+
+            if (double.TryParse(cmb.Text,out double fontSize))
             {
                 rtbContent.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSize);
             }
