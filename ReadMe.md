@@ -90,7 +90,6 @@ For a locally running desktop application intended for demonstration purposes, t
 ## Possible extensions
 
 ### Must Do
-- Make rename only show textbox for the row that was clicked (probably move that code into a new NotebookVM?)
 
 - Add some styles eg "CancelButton" "PrimaryButton (default one)" "SecondaryButton"
 

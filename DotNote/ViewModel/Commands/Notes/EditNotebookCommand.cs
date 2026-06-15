@@ -22,12 +22,15 @@ namespace DotNote.ViewModel.Commands.Notes
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return parameter is NotebookVM;
         }
 
         public void Execute(object? parameter)
         {
-            VM.StartEditingNotebook();
+            if (parameter is NotebookVM notebookVM)
+            {
+                VM.StartEditingNotebook(notebookVM);
+            }
         }
     }
 }

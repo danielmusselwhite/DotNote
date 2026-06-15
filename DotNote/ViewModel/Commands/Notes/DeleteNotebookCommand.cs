@@ -28,9 +28,9 @@ namespace DotNote.ViewModel.Commands.Notes
 
         public void Execute(object? parameter)
         {
-            Notebook notebook = parameter as Notebook;
-            if (notebook == null) return;
-            VM.DeleteNotebook(notebook);
+            NotebookVM notebookVM = parameter as NotebookVM;
+            if (notebookVM == null) return;
+            VM.DeleteNotebook(notebookVM);
         }
     }
 }

@@ -11,6 +11,10 @@
         Icon="/favicon.ico"
         Title="Notes" Height="450" Width="800">
 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
     <DockPanel DataContext="{Binding}">
         <!-- Main Menu -->
         <Menu DockPanel.Dock="Top">
@@ -19,8 +23,8 @@
                           Command="{Binding NewNotebookCommand}" />
                 <MenuItem Header="New Note" 
                           Command="{Binding NewNoteCommand}"
-                          CommandParameter="{Binding SelectedNotebook}"/> <!-- Pass the selected notebook as a parameter -->
-
+                          CommandParameter="{Binding SelectedNotebookVM.Model}"/> <!-- Pass the selected notebook as a parameter -->
+                
                 <Separator/>
                 
                 <MenuItem Header="View Profile"
@@ -44,8 +48,8 @@
         <ListView DockPanel.Dock="Left"
                   Background="SkyBlue"
                   Width="140"
-                  ItemsSource="{Binding Notebooks}"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding NotebookVMs}"
+                  SelectedValue="{Binding SelectedNotebookVM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -54,7 +58,8 @@
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename" 
-                                            Command="{Binding DataContext.EditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Command="{Binding DataContext.EditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
                                 <MenuItem Header="Delete" 
                                             Command="{Binding DataContext.DeleteNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                             CommandParameter="{Binding}"/>
@@ -63,7 +68,8 @@
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
                         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{Binding DataContext.IsNotebookEditVisible, RelativeSource={RelativeSource AncestorType=Window}}">
+                            Visibility="{Binding IsRenaming,
+                            Converter={StaticResource BoolToVisibilityConverter}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
                                     <i:InvokeCommandAction Command="{Binding DataContext.EndEditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"

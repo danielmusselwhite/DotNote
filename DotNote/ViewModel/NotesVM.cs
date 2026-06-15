@@ -21,15 +21,15 @@ namespace DotNote.ViewModel
         #endregion
 
         #region Properties
-        public ObservableCollection<Notebook> Notebooks { get; set; }
-        private Notebook selectedNotebook;
-        public Notebook SelectedNotebook
+        public ObservableCollection<NotebookVM> NotebookVMs { get; set; }
+        private NotebookVM selectedNotebookVM;
+        public NotebookVM SelectedNotebookVM
         {
-            get { return selectedNotebook; }
+            get { return selectedNotebookVM; }
             set 
             { 
-                selectedNotebook = value;
-                OnPropertyChanged(nameof(SelectedNotebook));
+                selectedNotebookVM = value;
+                OnPropertyChanged(nameof(SelectedNotebookVM));
 
                 _ = GetNotes(); // is this okay as it is async?
             }
@@ -56,17 +56,7 @@ namespace DotNote.ViewModel
             get { return SelectedNote != null; }
         }
 
-
-        private Visibility isNotebookEditVisible;
-        public Visibility IsNotebookEditVisible
-        {
-            get { return isNotebookEditVisible; }
-            set
-            {
-                isNotebookEditVisible = value;
-                OnPropertyChanged(nameof(IsNotebookEditVisible));
-            }
-        }
+        private NotebookVM _editingNotebook; // Keep track of the notebook being edited
         #endregion
 
         #region Events
@@ -100,12 +90,10 @@ namespace DotNote.ViewModel
             EndEditNotebookCommand = new EndEditNotebookCommand(this);
             ViewProfileCommand = new ViewProfileCommand(this);
 
-            Notebooks = new ObservableCollection<Notebook>();
+            NotebookVMs = new ObservableCollection<NotebookVM>();
             Notes = new ObservableCollection<Note>();
 
             FontFamilies = new ObservableCollection<FontFamily>(Fonts.SystemFontFamilies.OrderBy(f => f.Source));
-
-            IsNotebookEditVisible = Visibility.Collapsed;
         }
         #endregion
 
@@ -130,29 +118,38 @@ namespace DotNote.ViewModel
                 .Where(n => n.UserId == App.LoggedInUser!.localId)
                 .ToList();
 
-            Notebooks.Clear();
+            NotebookVMs.Clear();
             foreach (var notebook in notebooks)
             {
-                Notebooks.Add(notebook);
+                NotebookVMs.Add(new NotebookVM(notebook));
             }
         }
 
-        public void StartEditingNotebook()
+        public void StartEditingNotebook(NotebookVM notebookVM)
         {
-            IsNotebookEditVisible = Visibility.Visible;
+            // If another notebook is currently being edited, stop editing it
+            if (_editingNotebook != null)
+                _editingNotebook.IsRenaming = false;
+
+            // Set the new notebook as the one being edited
+            _editingNotebook = notebookVM;
+            notebookVM.IsRenaming = true;
         }
 
-        public async void StopEditingNotebook(Notebook notebook)
+        public async Task StopEditingNotebook(NotebookVM notebookVM)
         {
-            IsNotebookEditVisible = Visibility.Collapsed;
-            await _db.Update(notebook);
-            GetNotebooks();
+            // Update the DB
+            await _db.Update(notebookVM.Model);
+
+            // Reset the editing state
+            _editingNotebook?.IsRenaming = false;
+            _editingNotebook = null;
         }
 
-        public async void DeleteNotebook(Notebook notebook)
+        public async void DeleteNotebook(NotebookVM notebookVM)
         {
-            if (notebook == null) return;
-            await _db.Delete(notebook);
+            if (notebookVM == null) return;
+            await _db.Delete(notebookVM.Model);
             GetNotebooks();
         }
         #endregion
@@ -175,10 +172,10 @@ namespace DotNote.ViewModel
 
         public async Task GetNotes()
         {
-            if (SelectedNotebook == null || string.IsNullOrWhiteSpace(SelectedNotebook.Id)) return;
+            if (SelectedNotebookVM == null || string.IsNullOrWhiteSpace(SelectedNotebookVM.Model.Id)) return;
 
             var notes = (await _db.GetAll<Note>())
-                .Where(n => n.NotebookId == SelectedNotebook.Id);
+                .Where(n => n.NotebookId == SelectedNotebookVM.Model.Id);
 
             Notes.Clear();
             foreach (var note in notes)
