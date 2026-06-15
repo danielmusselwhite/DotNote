@@ -274,6 +274,9 @@ namespace DotNote.View
                 fontSize == DependencyProperty.UnsetValue
                     ? ""
                     : fontSize.ToString(); // set font size combo box to match selection
+
+            _pendingFontColor = rtbContent.Selection.GetPropertyValue(Inline.ForegroundProperty) as SolidColorBrush ?? Brushes.Black; // update the pending font color to match the selection
+            colourIndicator.Background = _pendingFontColor; // set colour indicator to match selection
         }
         #endregion
 
