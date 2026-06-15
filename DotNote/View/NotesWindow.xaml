@@ -9,6 +9,7 @@
         xmlns:uc="clr-namespace:DotNote.View.UserControls"
         xmlns:vm="clr-namespace:DotNote.ViewModel"
         xmlns:ui="clr-namespace:DotNote.ViewModel.Helpers.UiHelpers"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Icon="/favicon.ico"
         Title="Notes" Height="450" Width="800">
@@ -144,7 +145,8 @@
 
         <!-- Main Content -->
         <DockPanel Grid.Row="3"
-                   Grid.Column="4">
+                   Grid.Column="4"
+                   IsEnabled="{Binding IsNoteSelected}">
 
             <!-- Toolbar -->
             <ToolBarTray DockPanel.Dock="Top">
@@ -153,6 +155,44 @@
                             FontFamily="Segoe Fluent Icons"
                             Content="&#xE720;"
                             ToolTip="Speech to Text"/>
+
+                    <Button x:Name="fontColourButton"
+                            Click="fontColourButton_Click"
+                            ToolTip="Font Colour">
+                        <StackPanel>
+                            <TextBlock Text="A"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"/>
+
+                            <Border x:Name="colourIndicator"
+                                    Width="18"
+                                    Height="3"
+                                    Background="Black"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Popup x:Name="fontColourPopup"
+                           PlacementTarget="{Binding ElementName=fontColourButton}"
+                           Placement="Bottom"
+                           StaysOpen="False">
+
+                        <Border Background="White"
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Padding="5">
+
+                            <StackPanel>
+                                <xctk:ColorCanvas x:Name="fontColorPicker"
+                                                  Width="250"
+                                                  UsingAlphaChannel="False"
+                                                  SelectedColorChanged="fontColorCanvas_SelectedColorChanged"/>
+
+                                <Button Content="OK"
+                                    Click="ApplyFontColour_Click"/>
+                            </StackPanel>
+                        </Border>
+
+                    </Popup>
 
                     <ToggleButton x:Name="boldButton"
                             Click="boldButton_Click">
@@ -199,13 +239,11 @@
                      Text="{Binding SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      FontSize="16"
                      FontWeight="Bold"
-                     LostFocus="TitleEdit_LostFocus"
-                     IsEnabled="{Binding IsNoteSelected}"/>
+                     LostFocus="TitleEdit_LostFocus"/>
 
             <RichTextBox x:Name="rtbContent"
                          TextChanged="rtbContent_TextChanged"
-                         SelectionChanged="rtbContent_SelectionChanged"
-                         IsEnabled="{Binding IsNoteSelected}"/>
+                         SelectionChanged="rtbContent_SelectionChanged"/>
         </DockPanel>
     </Grid>
 </Window>

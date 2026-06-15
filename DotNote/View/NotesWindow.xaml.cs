@@ -26,9 +26,13 @@ namespace DotNote.View
 
         private readonly NotesVM VM;
 
+        private SolidColorBrush _pendingFontColor;
+
         public NotesWindow(NotesVM vm, IMapper mapper, IDatabaseHelper db)
         {
             InitializeComponent();
+
+            _pendingFontColor = new SolidColorBrush(Colors.Black);
 
             VM = vm;
             DataContext = VM;
@@ -59,8 +63,7 @@ namespace DotNote.View
         #region EventHandlers
         private async void ViewModel_SelectedNoteChanged(object? sender, EventArgs e)
         {
-            // Clear previous contents
-            rtbContent.Document.Blocks.Clear();
+            rtbContent.Document.Blocks.Clear(); // Clear previous contents
 
             // Set the TextRange in the RichTextBox to the content of the selected note's RTF file if it exists
             if (!string.IsNullOrWhiteSpace(VM?.SelectedNote?.FileLocation))
@@ -105,6 +108,37 @@ namespace DotNote.View
                 }
             }
         }
+
+        #region Font Colour Handlers
+        private void fontColourButton_Click(object sender, RoutedEventArgs e)
+        {
+            fontColourPopup.IsOpen = true;
+        }
+
+        private void fontColorCanvas_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            if (!e.NewValue.HasValue)
+                return;
+
+            var brush = new SolidColorBrush(e.NewValue.Value);
+
+            // Update the colour indicators background
+            _pendingFontColor = brush;
+            colourIndicator.Background = _pendingFontColor;
+        }
+
+        private void ApplyFontColour_Click(object sender, RoutedEventArgs e)
+        {
+            if (_pendingFontColor is SolidColorBrush brush)
+            {
+                rtbContent.Selection.ApplyPropertyValue(
+                    TextElement.ForegroundProperty,
+                    brush);
+            }
+
+            fontColourPopup.IsOpen = false;
+        }
+        #endregion
 
         private void boldButton_Click(object sender, RoutedEventArgs e)
         {

@@ -89,12 +89,5 @@ For a locally running desktop application intended for demonstration purposes, t
 
 ## Possible extensions
 
-### Must Do
-
-- nothing atm
-
-### Optional
-- add a colour picker for the font colour?
-
 - maybe add profile picture upload in the profile view
   - and display a mini icon of that profile picture in the toolbar?
