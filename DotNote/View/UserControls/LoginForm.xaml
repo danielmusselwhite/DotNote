@@ -23,7 +23,10 @@
                     Margin="0,5"
                     Content="Login" />
 
-        <Button Content="Don't Have An Account?" Command="{Binding SwitchShownLoginViewCommand}" />
+        <Button Content="Don't Have An Account?" 
+                Command="{Binding SwitchShownLoginViewCommand}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                />
 
     </StackPanel>
 </UserControl>

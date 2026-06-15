@@ -30,6 +30,9 @@
                     Margin="0,5"
                     Content="Register" />
 
-        <Button Content="Already Have An Account?" Command="{Binding SwitchShownLoginViewCommand}" />
+        <Button Content="Already Have An Account?" 
+                Command="{Binding SwitchShownLoginViewCommand}" 
+                Style="{StaticResource SecondaryButtonStyle}"
+                />
     </StackPanel>
 </UserControl>
