@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using DotNote.Configuration;
 using DotNote.Model;
 using DotNote.View;
 using DotNote.ViewModel.Commands;
 using DotNote.ViewModel.Commands.Notes;
 using DotNote.ViewModel.Helpers;
 using DotNote.ViewModel.Helpers.DatabaseHelpers;
+using DotNote.ViewModel.Helpers.StorageHelpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DotNote.ViewModel
 {
@@ -17,6 +20,7 @@ namespace DotNote.ViewModel
         #region dependencies
         private readonly IMapper _mapper;
         private readonly IDatabaseHelper _db;
+        private readonly AzureBlobHelper _azureBlobHelper;
         private readonly Func<UserDetails, ProfileWindow> _profileWindowFactory;
         #endregion
 
@@ -59,6 +63,17 @@ namespace DotNote.ViewModel
         }
 
         private NotebookVM _editingNotebook; // Keep track of the notebook being edited
+
+        private ImageSource profilePicture;
+        public ImageSource ProfilePicture
+        {
+            get { return profilePicture; }
+            set
+            {
+                profilePicture = value;
+                OnPropertyChanged(nameof(ProfilePicture));
+            }
+        }
         #endregion
 
         #region Events
@@ -79,10 +94,12 @@ namespace DotNote.ViewModel
         public NotesVM(
             IMapper mapper,
             IDatabaseHelper databaseHelper,
+            AzureBlobHelper azureBlobHelper,
             Func<UserDetails, ProfileWindow> profileWindowFactory)
         {
             _mapper = mapper;
             _db = databaseHelper;
+            _azureBlobHelper = azureBlobHelper;
             _profileWindowFactory = profileWindowFactory;
 
             NewNotebookCommand = new NewNotebookCommand(this);
@@ -188,12 +205,31 @@ namespace DotNote.ViewModel
         }
         #endregion
 
+        public async Task UpdateProfilePicture()
+        {
+            // Load the profile picture from Azure Storage Blob
+            var user = (await _db.GetAll<UserDetails>())
+                .FirstOrDefault(u => u.UserId == App.LoggedInUser!.localId);
+
+            var blob = await _azureBlobHelper.GetStreamFromBlobAsync(user.ProfilePictureBlobName, AppSettings.AzureStorage.UserPhotosContainerName);
+            blob.Position = 0;
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = blob;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            ProfilePicture = bitmap;
+        }
+
         public async void ViewProfile()
         {
             var user = (await _db.GetAll<UserDetails>())
                 .FirstOrDefault(u => u.UserId == App.LoggedInUser!.localId);
             var profileWindow = _profileWindowFactory(user);
             profileWindow.ShowDialog();
+
+            // Update the profile picture
+            await UpdateProfilePicture();
         }
 
         #endregion

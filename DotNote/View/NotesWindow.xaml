@@ -70,10 +70,35 @@
 
         <!-- Status Bar -->
         <StatusBar Grid.Row="4"
-                Grid.ColumnSpan="5">
+           Grid.ColumnSpan="5">
+
+            <!-- Profile picture -->
+            <StatusBarItem>
+                <Button Command="{Binding ViewProfileCommand}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="0"
+                    ToolTip="View Profile"
+                    Cursor="Hand">
+                    <Ellipse Width="28"
+                         Height="28"
+                         Stroke="LightGray"
+                         StrokeThickness="1"
+                         ToolTip="Profile">
+
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="{Binding ProfilePicture}"
+                            Stretch="UniformToFill"/>
+                        </Ellipse.Fill>
+
+                    </Ellipse>
+                </Button>
+            </StatusBarItem>
+
             <StatusBarItem>
                 <TextBlock x:Name="txtStatusMessage"/>
             </StatusBarItem>
+
         </StatusBar>
 
         <!-- NoteBooks -->
