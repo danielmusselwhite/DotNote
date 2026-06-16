@@ -27,9 +27,7 @@ Enforced per-user data isolation using Firebase authentication rules and structu
 
 ## Demo
 
-`TODO - upload demo mp4 to youtube and link here`
-
-[![dotnote_screenshot](docs/dotnote_ss.png)](https://www.youtube.com)
+[![dotnote_screenshot](docs/dotnote_ss.png)](https://youtu.be/WZyvW5tASI8)
 
 - Click the above screenshot to view demo
 
