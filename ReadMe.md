@@ -1,19 +1,26 @@
 # DotNote
 
-A desktop note-taking application inspired by Evernote. Users can create an account, then can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar; allowing users to modify font type, size, colour, and stylings. With the physical files stored in Azure Storage, and related data stored in Firebase Realtime DataBase; and the notes access controlled to only allow the user that created them to access them.
+DotNote is a desktop note-taking application inspired by Evernote. Users can register an account and create notebooks and notes using a rich text editor with a custom formatting toolbar, allowing control over font type, size, colour, and styling.
 
-Users can also create a profile and upload a profile picture which is stored in azure.
+Notes and user files are stored remotely using Azure Blob Storage, while application data is persisted in Firebase Realtime Database. Access to notes is secured so that only the creating user can view and manage their content.
+
+Users can also create a profile and upload a profile picture, which is stored in Azure Blob Storage.
+
+---
 
 ## Features
 
-* User auth provided through Firebase Authentication (register, login, reset password)
-* Create and manage notebooks
-* Create, edit, and delete notes
-* Create, and edit User Profile
-* Rich text editing and formatting
-* Remote data persistence using Firebase Realtime Database
-* Remote file persistence using Azure Blob Storage
-* Speech-to-text integration using Azure Speech Services
+- User authentication via Firebase Authentication (register, login, password reset)
+- Create and manage notebooks
+- Create, edit, and delete notes
+- User profile creation and editing
+  - Profile image upload
+- Rich text editor with formatting tools (fonts, size, colour, styling)
+- Cloud data persistence using Firebase Realtime Database
+- File storage using Azure Blob Storage
+- Speech-to-text integration via Azure Speech Services
+
+---
 
 ## Screenshots
 
@@ -28,7 +35,7 @@ Users can also create a profile and upload a profile picture which is stored in 
 ### Data Model
 
 ```text
-User 1 - 1 UserDetails
+User 1 ── 1 UserDetails
  1
  └── * Notebooks
         1
@@ -43,36 +50,38 @@ Relationships:
 
 ### Design Pattern
 
-The application follows the MVVM (Model-View-ViewModel) architectural pattern, providing separation of concerns between the UI, business logic, and data layers.
+The application follows the MVVM (Model-View-ViewModel) architectural pattern, ensuring a clear separation of concerns between UI, business logic, and data access layers.
 
 ## Technologies
+* Frontend / UI
+  * WPF
+  * Blend Animations
+* Language & Framework
+  * C#
+  * .NET 10
+* Architecture & Patterns
+  * MVVM
+  * Dependency Injection
+  * AutoMapper
+* Authentication Services
+  * Firebase Authentication
+* Database Services
+  * Firebase Realtime Database
+* Cloud Storage Services
+  * Azure Blob Storage
+* Other Backend Services
+  * Azure Speech Services
 
-* WPF
-* C#
-* .NET 10
-* SQLite
-* Blend Animations
-* Firebase Auth
-* Firebase Realtime Data Storage
-* Azure Speech Services
-* Azure Blob Storage
-* Dependency Injection
-* AutoMapper
+## Configuration
 
-### Azure Speech Configuration
+This project uses a gitignored appsettings.json file to store Azure and Firebase configuration values locally, ensuring that sensitive credentials are not committed to source control.
 
-This portfolio project uses a gitignored `appsettings.json` file to store (Azure and Firebase) configuration values to ensure secrets remain secure.
-
-However, in a production environment, sensitive information such as API keys would typically be managed through environment variables, a secret management service, or a backend API. 
-
-For a locally running desktop application intended for demonstration purposes, those approaches were considered outside the scope of this project.
+In production systems, these values would typically be managed using environment variables, secure secret storage services, or a dedicated backend API. However, for a locally running desktop application intended for demonstration purposes, those approaches were considered outside the scope of this project. However, if this project were to scale, I would create a dedicated backend API that the WPF would communicate with, instead of interacting with the database and blob storage directly.
 
 ## Running the Application
-
 1. Clone the repository.
-2. Create an `appsettings.json` file in the project root.
-3. Add your own Azure Speech Service configuration, Firebase WebApp, and Azure Storage configurations:
-
+2. Create an appsettings.json file in the project root.
+3. Add your Azure Speech Service, Firebase, and Azure Storage configuration:
 
 ```json
 {
@@ -90,7 +99,6 @@ For a locally running desktop application intended for demonstration purposes, t
     "UserPhotosContainerName": "userphotos"
   }
 }
-
 ```
 
 4. Build and run the application.
