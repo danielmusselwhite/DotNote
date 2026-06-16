@@ -3,6 +3,7 @@ using Azure.Storage.Blobs;
 using DotNote.Configuration;
 using DotNote.ViewModel;
 using DotNote.ViewModel.Helpers.DatabaseHelpers;
+using DotNote.ViewModel.Helpers.StorageHelpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,13 +23,14 @@ namespace DotNote.View
         #region dependencies
         private readonly IMapper _mapper;
         private readonly IDatabaseHelper _db;
+        private readonly AzureBlobHelper _azureBlobHelper;
         #endregion
 
         private readonly NotesVM VM;
 
         private SolidColorBrush _pendingFontColor;
 
-        public NotesWindow(NotesVM vm, IMapper mapper, IDatabaseHelper db)
+        public NotesWindow(NotesVM vm, IMapper mapper, IDatabaseHelper db, AzureBlobHelper azureBlobHelper)
         {
             InitializeComponent();
 
@@ -39,6 +41,7 @@ namespace DotNote.View
 
             _mapper = mapper;
             _db = db;
+            _azureBlobHelper = azureBlobHelper;
 
             VM.SelectedNoteChanged += ViewModel_SelectedNoteChanged;
         }
@@ -70,7 +73,7 @@ namespace DotNote.View
             {
                 // first download the file from azure storage, and save it locally
                 string downloadPath = $"{VM.SelectedNote.Id}.rtf";
-                await new BlobClient(new Uri(VM.SelectedNote.FileLocation)).DownloadToAsync(downloadPath);
+                await _azureBlobHelper.DownloadBlobFromUriAsync(VM.SelectedNote.FileLocation, downloadPath);
 
                 // then load that files contents into the Rich Text Box
                 using (var fileStream = System.IO.File.OpenRead(downloadPath))
@@ -230,7 +233,7 @@ namespace DotNote.View
                 System.IO.File.Delete(rtfFilePath);
                 
                 // then delete the file from Azure Storage, and if that succeeds, delete the Notes db record
-                var success = await DeleteBlob(rtfFilePath, fileName);
+                var success = await DeleteBlob(fileName);
 
                 if(!success)
                 {
@@ -280,33 +283,21 @@ namespace DotNote.View
         }
         #endregion
 
+        #endregion
+
         #region Helper Methods
         private async Task<string> UploadBlob(string rtfFilePath, string fileName)
         {
-            string connectionString = AppSettings.AzureStorage.ConnectionString;
-            string containerName = AppSettings.AzureStorage.ContainerName;
-
-            var containerClient = new BlobContainerClient(connectionString, containerName);
-            containerClient.CreateIfNotExistsAsync(); // ensure container exists
-
-            var blob = containerClient.GetBlobClient(fileName);
-            await blob.UploadAsync(rtfFilePath, overwrite:true);
-            return blob.Uri.ToString();
+            string containerName = AppSettings.AzureStorage.NotesContainerName;
+            return await _azureBlobHelper.UploadBlobAsync(rtfFilePath, fileName, containerName);
         }
 
-        private async Task<bool> DeleteBlob(string rtfFilePath, string fileName)
+        private async Task<bool> DeleteBlob(string fileName)
         {
-            string connectionString = AppSettings.AzureStorage.ConnectionString;
-            string containerName = AppSettings.AzureStorage.ContainerName;
-
-            var containerClient = new BlobContainerClient(connectionString, containerName);
-            containerClient.CreateIfNotExistsAsync(); // ensure container exists
-
-            var blob = containerClient.GetBlobClient(fileName);
-            return await blob.DeleteIfExistsAsync();
+            string containerName = AppSettings.AzureStorage.NotesContainerName;
+            return await _azureBlobHelper.DeleteBlobAsync(fileName, containerName);
         }
         #endregion
 
-        #endregion
     }
 }

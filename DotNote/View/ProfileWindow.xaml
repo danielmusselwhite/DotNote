@@ -6,42 +6,78 @@
         xmlns:vm="clr-namespace:DotNote.ViewModel.Login"
         xmlns:local="clr-namespace:DotNote.View"
         mc:Ignorable="d"
-        Title="Profile" Height="300" Width="300">
+        Title="Profile"
+        Height="500"
+        Width="350">
 
-    <StackPanel Margin="10">
-        <TextBlock Text="Email: "/>
-        <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Focusable="False"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20">
 
-        <TextBlock Text="First Name: "/>
-        <TextBox Text="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid HorizontalAlignment="Center"
+      Margin="0,0,0,20">
 
-        <TextBlock Text="Last Name: "/>
-        <TextBox Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Ellipse Width="120"
+             Height="120"
+             Stroke="LightGray"
+             StrokeThickness="1">
 
-        <StackPanel Margin="0 10 0 0">
-            <Button Content="Reset Password" 
-                Command="{Binding UpdatePasswordCommand}" 
-                Style="{StaticResource SecondaryButtonStyle}"
-                />
-            <Grid Margin="0,10,0,0">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding ProfilePicture}"
+                        Stretch="UniformToFill"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <Button Width="32"
+            Height="32"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Command="{Binding UpdateProfilePictureCommand}"
+            ToolTip="Change profile picture">
+                    ✏️
+                </Button>
+
+            </Grid>
+
+            <TextBlock Text="Email:"/>
+            <TextBox Text="{Binding Email}"
+                     IsReadOnly="True"/>
+
+            <TextBlock Margin="0,10,0,0"
+                       Text="First Name:"/>
+            <TextBox Text="{Binding FirstName,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Margin="0,10,0,0"
+                       Text="Last Name:"/>
+            <TextBox Text="{Binding LastName,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Content="Reset Password"
+                    Margin="0,20,0,0"
+                    Command="{Binding UpdatePasswordCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}"/>
+
+            <Grid Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
-                    Content="Save"
-                    Command="{Binding SaveProfileCommand}"
-                    CommandParameter="{Binding}"
-                    />
+                        Content="Save"
+                        Margin="0,0,5,0"
+                        Command="{Binding SaveProfileCommand}"
+                        CommandParameter="{Binding}" />
 
                 <Button Grid.Column="1"
-                    Content="Cancel"
-                    Click="Cancel_Click" 
-                    Style="{StaticResource CancelButtonStyle}"
-                    />
+                        Content="Cancel"
+                        Margin="5,0,0,0"
+                        Click="Cancel_Click"
+                        Style="{StaticResource CancelButtonStyle}" />
             </Grid>
+
         </StackPanel>
-         
-    </StackPanel>
+    </ScrollViewer>
 </Window>

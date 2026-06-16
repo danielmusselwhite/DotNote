@@ -4,6 +4,7 @@ using DotNote.View;
 using DotNote.ViewModel;
 using DotNote.ViewModel.Helpers;
 using DotNote.ViewModel.Helpers.DatabaseHelpers;
+using DotNote.ViewModel.Helpers.StorageHelpers;
 using DotNote.ViewModel.Login;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -51,13 +52,14 @@ namespace DotNote
             // AutoMapper
             services.AddAutoMapper(cfg =>
             {
-                cfg.AddProfile<UserProfile>();
+                cfg.AddProfile<UserProfile>(); // profile for mapping User. UserDetails (db record), and the Firebase DTO (user auth record)
             });
 
             // Services
             services.AddSingleton<FirebaseAuthHelper>();
             services.AddSingleton<IDatabaseHelper, FirebaseDbHelper>();
             services.AddSingleton<FirebaseDbHelper>();
+            services.AddSingleton<AzureBlobHelper>();
 
             // Factories for views with runtime args
             services.AddTransient<Func<UserDetails, ProfileWindow>>(sp =>

@@ -86,8 +86,3 @@ For a locally running desktop application intended for demonstration purposes, t
 ```
 
 4. Build and run the application.
-
-## Possible extensions
-
-- maybe add profile picture upload in the profile view
-  - and display a mini icon of that profile picture in the toolbar?
