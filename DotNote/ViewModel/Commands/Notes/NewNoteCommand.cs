@@ -28,13 +28,13 @@ namespace DotNote.ViewModel.Commands
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
             var selectedNotebook = parameter as Notebook;
 
             if(selectedNotebook == null) return;
 
-            VM.CreateNote(selectedNotebook.Id);
+            await VM.CreateNote(selectedNotebook.Id);
         }
     }
 }

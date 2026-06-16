@@ -84,6 +84,17 @@ namespace DotNote.ViewModel.Login
             UpdateProfilePictureCommand = new UpdateProfilePictureCommand(this);
         }
 
+        public async Task InitializeAsync(UserDetails user)
+        {
+            Email = user.Email;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            UserId = user.UserId;
+            ProfileId = user.Id;
+            ProfilePictureBlobName = user.ProfilePictureBlobName;
+            await LoadSavedImage();
+        }
+
         public async Task UpdateProfilePicture()
         {
             var dialog = new OpenFileDialog
@@ -129,6 +140,32 @@ namespace DotNote.ViewModel.Login
             return tempFile;
         }
 
+        private async Task LoadSavedImage()
+        {
+            // todo - add default profile picture if the image fails to load
+            if (!string.IsNullOrWhiteSpace(ProfilePictureBlobName))
+            {
+                try
+                {
+                    // Load the profile picture from Azure Storage Blob
+                    var blob = await _azureBlobHelper.GetStreamFromBlobAsync(ProfilePictureBlobName, AppSettings.AzureStorage.UserPhotosContainerName);
+                    blob.Position = 0;
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = blob;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    ProfilePicture = bitmap;
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            else
+            {
+            }
+        }
+
         internal async Task SaveProfile()
         {
 
@@ -152,7 +189,7 @@ namespace DotNote.ViewModel.Login
             ProfileUpdateFinished.Invoke(this, EventArgs.Empty);
         }
 
-        internal async void UpdatePassword()
+        internal async Task UpdatePassword()
         {
             var success = await _auth.SendPasswordReset(App.LoggedInUser!.email);
             if (!success) MessageBox.Show("Failed To Send Password Reset Email, Please Try Again Later");

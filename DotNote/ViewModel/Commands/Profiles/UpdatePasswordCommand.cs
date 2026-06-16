@@ -27,9 +27,9 @@ namespace DotNote.ViewModel.Commands.Profiles
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            VM.UpdatePassword();
+            await VM.UpdatePassword();
         }
     }
 }

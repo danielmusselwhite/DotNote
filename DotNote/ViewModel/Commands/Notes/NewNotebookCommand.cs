@@ -25,9 +25,9 @@ namespace DotNote.ViewModel.Commands
             return true; 
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            VM.CreateNotebook();
+            await VM.CreateNotebook();
         }
     }
 }

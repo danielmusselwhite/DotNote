@@ -1,6 +1,8 @@
 # DotNote
 
-A desktop note-taking application inspired by Evernote. Users can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar.
+A desktop note-taking application inspired by Evernote. Users can create an account, then can create notebooks and notes, and edit content using a rich text editor with a custom formatting toolbar; allowing users to modify font type, size, colour, and stylings. With the physical files stored in Azure Storage, and related data stored in Firebase Realtime DataBase; and the notes access controlled to only allow the user that created them to access them.
+
+Users can also create a profile and upload a profile picture which is stored in azure.
 
 ## Features
 
@@ -69,7 +71,8 @@ For a locally running desktop application intended for demonstration purposes, t
 
 1. Clone the repository.
 2. Create an `appsettings.json` file in the project root.
-3. Add your own Azure Speech Service configuration and Firebase WebApp configuration:
+3. Add your own Azure Speech Service configuration, Firebase WebApp, and Azure Storage configurations:
+
 
 ```json
 {
@@ -80,6 +83,11 @@ For a locally running desktop application intended for demonstration purposes, t
   "Firebase": {
     "ApiKey": "YOUR_WEBAPP_KEY_HERE",
     "DatabaseURL": "YOUR_DB_URL_HERE"
+  },
+  "AzureStorage": {
+    "ConnectionString": "YOUR_CONNECTIONSTRING_HERE",
+    "NotesContainerName": "notes",
+    "UserPhotosContainerName": "userphotos"
   }
 }
 

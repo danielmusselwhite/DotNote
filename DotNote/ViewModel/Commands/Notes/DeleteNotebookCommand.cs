@@ -26,11 +26,11 @@ namespace DotNote.ViewModel.Commands.Notes
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
             NotebookVM notebookVM = parameter as NotebookVM;
             if (notebookVM == null) return;
-            VM.DeleteNotebook(notebookVM);
+            await VM.DeleteNotebook(notebookVM);
         }
     }
 }

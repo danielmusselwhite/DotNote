@@ -55,7 +55,7 @@ namespace DotNote.ViewModel.Login
             OnPropertyChanged(nameof(IsShowingRegister));
         }
 
-        public async void PerformLogin()
+        public async Task PerformLogin()
         {
             var dto = _mapper.Map<FirebaseAuthDTO>(User);
             var success = await _authHelper.Login(dto);
@@ -64,7 +64,7 @@ namespace DotNote.ViewModel.Login
                 Authenticated?.Invoke(this, EventArgs.Empty);
         }
 
-        public async void PerformRegister()
+        public async Task PerformRegister()
         {
             var dto = _mapper.Map<FirebaseAuthDTO>(User);
             var success = await _authHelper.Register(dto);

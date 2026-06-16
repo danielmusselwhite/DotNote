@@ -119,7 +119,7 @@ namespace DotNote.ViewModel
 
         #region Methods
         #region Notebook Methods
-        public async void CreateNotebook()
+        public async Task CreateNotebook()
         {
             Notebook newNotebook = new Notebook
             {
@@ -166,7 +166,7 @@ namespace DotNote.ViewModel
             _editingNotebook = null;
         }
 
-        public async void DeleteNotebook(NotebookVM notebookVM)
+        public async Task DeleteNotebook(NotebookVM notebookVM)
         {
             if (notebookVM == null) return;
             await _db.Delete(notebookVM.Model);
@@ -175,7 +175,7 @@ namespace DotNote.ViewModel
         #endregion
 
         #region Note Methods
-        public async void CreateNote(string notebookId)
+        public async Task CreateNote(string notebookId)
         {
             Note newNote = new Note
             {
@@ -221,7 +221,7 @@ namespace DotNote.ViewModel
             ProfilePicture = bitmap;
         }
 
-        public async void ViewProfile()
+        public async Task ViewProfile()
         {
             var user = (await _db.GetAll<UserDetails>())
                 .FirstOrDefault(u => u.UserId == App.LoggedInUser!.localId);

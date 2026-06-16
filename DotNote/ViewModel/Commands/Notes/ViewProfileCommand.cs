@@ -26,9 +26,9 @@ namespace DotNote.ViewModel.Commands.Notes
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            VM.ViewProfile();
+            await VM.ViewProfile();
         }
     }
 }

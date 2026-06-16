@@ -35,9 +35,9 @@ namespace DotNote.ViewModel.Commands.Login
             return true;
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            VM.PerformLogin();
+            await VM.PerformLogin();
         }
     }
 }
