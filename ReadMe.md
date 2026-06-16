@@ -25,9 +25,13 @@ Enforced per-user data isolation using Firebase authentication rules and structu
 - File storage using Azure Blob Storage
 - Speech-to-text integration via Azure Speech Services
 
-## Screenshots
+## Demo
 
-`TODO - add here once app is finished`
+`TODO - upload demo mp4 to youtube and link here`
+
+[![dotnote_screenshot](docs/dotnote_ss.png)](https://www.youtube.com)
+
+- Click the above screenshot to view demo
 
 ## Architecture
 
