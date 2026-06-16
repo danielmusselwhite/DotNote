@@ -28,7 +28,7 @@ namespace DotNote.ViewModel.Helpers.StorageHelpers
         {
             string connectionString = AppSettings.AzureStorage.ConnectionString;
             var containerClient = new BlobContainerClient(connectionString, containerName);
-            containerClient.CreateIfNotExistsAsync(); // ensure container exists
+            await containerClient.CreateIfNotExistsAsync(); // ensure container exists
             var blob = containerClient.GetBlobClient(fileName);
             var memoryStream = new MemoryStream();
             await blob.DownloadToAsync(memoryStream);

@@ -131,6 +131,12 @@
                             Converter={StaticResource BoolToVisibilityConverter}}"
                                  ui:FocusExtension.IsFocused="{Binding IsRenaming}">
 
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter"
+                                    Command="{Binding DataContext.EndEditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}" />
+                            </TextBox.InputBindings>
+                            
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
                                     <i:InvokeCommandAction Command="{Binding DataContext.EndEditNotebookCommand, RelativeSource={RelativeSource AncestorType=Window}}"

@@ -6,7 +6,12 @@ Notes and user files are stored remotely using Azure Blob Storage, while applica
 
 Users can also create a profile and upload a profile picture, which is stored in Azure Blob Storage.
 
----
+## Engineering Highlights
+Implemented MVVM architecture with clear separation between UI, domain logic, and services
+Designed a hybrid cloud storage model combining Firebase Realtime Database and Azure Blob Storage
+Built a rich text editor supporting font-level styling and formatting persistence
+Integrated Azure Speech Services for real-time dictation into notes
+Enforced per-user data isolation using Firebase authentication rules and structured database paths
 
 ## Features
 
@@ -19,8 +24,6 @@ Users can also create a profile and upload a profile picture, which is stored in
 - Cloud data persistence using Firebase Realtime Database
 - File storage using Azure Blob Storage
 - Speech-to-text integration via Azure Speech Services
-
----
 
 ## Screenshots
 

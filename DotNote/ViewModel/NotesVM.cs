@@ -211,6 +211,8 @@ namespace DotNote.ViewModel
             var user = (await _db.GetAll<UserDetails>())
                 .FirstOrDefault(u => u.UserId == App.LoggedInUser!.localId);
 
+            if (string.IsNullOrEmpty(user.ProfilePictureBlobName)) return;
+
             var blob = await _azureBlobHelper.GetStreamFromBlobAsync(user.ProfilePictureBlobName, AppSettings.AzureStorage.UserPhotosContainerName);
             blob.Position = 0;
             var bitmap = new BitmapImage();
