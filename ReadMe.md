@@ -31,11 +31,9 @@ Enforced per-user data isolation using Firebase authentication rules and structu
 
 - Click the above screenshot to view demo
 
-## Architecture
+## Architecture Diagram
 
-### ERD
-
-`TODO - put a high level ERD here`
+![dotnote_erd](docs/DotNote.drawio.png)
 
 ### Data Model
 
